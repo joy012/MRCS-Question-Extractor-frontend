@@ -1,6 +1,6 @@
+import { config } from '@/lib/config';
+import type { ApiError } from '@/types';
 import axios from 'axios';
-import { config } from '../lib/config';
-import type { ApiError } from '../types';
 
 // Create axios instance with default configuration
 export const apiClient = axios.create({

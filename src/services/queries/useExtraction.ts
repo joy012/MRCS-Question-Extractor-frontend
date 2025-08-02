@@ -1,30 +1,36 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ExtractionService } from '../api';
-import { invalidateQueries, queryKeys } from '../lib/query-client';
-import type { BatchExtractionRequest } from '../types';
+import { invalidateQueries, queryKeys } from '../../lib/query-client';
+import {
+  GET_EXTRACTION_LOGS,
+  GET_EXTRACTION_SUMMARY,
+  GET_PDFS,
+} from '../../lib/query-keys';
+import {
+  ExtractionService,
+  type StartExtractionRequest,
+} from '../api/extraction';
 
-// Get extraction status
-export const useExtractionStatus = () => {
+// Get available PDFs
+export const useGetPdfsQuery = () => {
   return useQuery({
-    queryKey: queryKeys.extraction.status(),
-    queryFn: ExtractionService.getExtractionStatus,
-    refetchOnWindowFocus: false,
-    refetchOnMount: true,
+    queryKey: [GET_PDFS],
+    queryFn: ExtractionService.listPdfs,
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 };
 
-// Get detailed progress
-export const useExtractionProgress = () => {
+// Get extraction status
+export const useGetExtractionStatusQuery = () => {
   return useQuery({
-    queryKey: queryKeys.extraction.progress(),
-    queryFn: ExtractionService.getDetailedProgress,
+    queryKey: queryKeys.extraction.status(),
+    queryFn: ExtractionService.getStatus,
     refetchOnWindowFocus: false,
     refetchOnMount: true,
   });
 };
 
 // Get extraction statistics
-export const useExtractionStatistics = () => {
+export const useGetExtractionStatisticsQuery = () => {
   return useQuery({
     queryKey: queryKeys.extraction.statistics(),
     queryFn: ExtractionService.getStatistics,
@@ -33,18 +39,18 @@ export const useExtractionStatistics = () => {
   });
 };
 
-// Get failed pages
-export const useFailedPages = () => {
+// Get extraction logs
+export const useGetExtractionLogsQuery = () => {
   return useQuery({
-    queryKey: queryKeys.extraction.failedPages(),
-    queryFn: ExtractionService.getFailedPages,
+    queryKey: [GET_EXTRACTION_LOGS],
+    queryFn: ExtractionService.getLogs,
     refetchOnWindowFocus: false,
     refetchOnMount: true,
   });
 };
 
 // Get PDF info
-export const usePdfInfo = () => {
+export const useGetPdfInfoQuery = () => {
   return useQuery({
     queryKey: queryKeys.extraction.pdfInfo(),
     queryFn: ExtractionService.getPdfInfo,
@@ -53,7 +59,7 @@ export const usePdfInfo = () => {
 };
 
 // Get Ollama health
-export const useOllamaHealth = () => {
+export const useGetOllamaHealthQuery = () => {
   return useQuery({
     queryKey: queryKeys.extraction.ollamaHealth(),
     queryFn: ExtractionService.getOllamaHealth,
@@ -63,7 +69,7 @@ export const useOllamaHealth = () => {
 };
 
 // Validate system
-export const useValidateSystem = () => {
+export const useValidateSystemQuery = () => {
   return useQuery({
     queryKey: queryKeys.extraction.validation(),
     queryFn: ExtractionService.validateExtraction,
@@ -73,26 +79,26 @@ export const useValidateSystem = () => {
 };
 
 // Get extraction summary
-export const useExtractionSummary = () => {
+export const useGetExtractionSummaryQuery = () => {
   return useQuery({
-    queryKey: ['extraction', 'summary'],
+    queryKey: [GET_EXTRACTION_SUMMARY],
     queryFn: ExtractionService.getExtractionSummary,
     refetchOnWindowFocus: false,
     refetchOnMount: true,
   });
 };
 
-// Start batch extraction mutation
-export const useStartBatchExtraction = () => {
+// Start extraction mutation
+export const useStartExtractionMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (params?: BatchExtractionRequest) => {
+    mutationFn: async (params: StartExtractionRequest) => {
       try {
-        const result = await ExtractionService.startBatchExtraction(params);
+        const result = await ExtractionService.startExtraction(params);
         return result;
       } catch (error) {
-        console.error('Batch extraction failed:', error);
+        console.error('Extraction failed:', error);
         throw error;
       }
     },
@@ -108,14 +114,14 @@ export const useStartBatchExtraction = () => {
       );
     },
     onSuccess: (data) => {
-      console.log('Batch extraction completed:', data);
+      console.log('Extraction completed:', data);
 
       // Invalidate and refetch extraction-related queries
       invalidateQueries.extraction.all();
       invalidateQueries.questions.all();
     },
     onError: (error) => {
-      console.error('Batch extraction error:', error);
+      console.error('Extraction error:', error);
 
       // Revert optimistic update on error
       queryClient.invalidateQueries({
@@ -131,28 +137,28 @@ export const useStartBatchExtraction = () => {
   });
 };
 
-// Stop batch extraction mutation
-export const useStopBatchExtraction = () => {
+// Stop extraction mutation
+export const useStopExtractionMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async () => {
       try {
-        const result = await ExtractionService.stopBatchExtraction();
+        const result = await ExtractionService.stopExtraction();
         return result;
       } catch (error) {
-        console.error('Stop batch extraction failed:', error);
+        console.error('Stop extraction failed:', error);
         throw error;
       }
     },
     onSuccess: (data) => {
-      console.log('Batch extraction stopped:', data);
+      console.log('Extraction stopped:', data);
 
       // Invalidate and refetch extraction-related queries
       invalidateQueries.extraction.all();
     },
     onError: (error) => {
-      console.error('Stop batch extraction error:', error);
+      console.error('Stop extraction error:', error);
     },
     onSettled: () => {
       // Always refetch status after completion
@@ -163,50 +169,10 @@ export const useStopBatchExtraction = () => {
   });
 };
 
-// Extract single page mutation
-export const useExtractSinglePage = () => {
+// Clear extraction state mutation
+export const useClearExtractionStateMutation = () => {
   return useMutation({
-    mutationFn: ({
-      pageNumber,
-      force = false,
-    }: {
-      pageNumber: number;
-      force?: boolean;
-    }) => ExtractionService.extractSinglePage(pageNumber, force),
-    onSuccess: () => {
-      invalidateQueries.extraction.all();
-      invalidateQueries.questions.all();
-    },
-  });
-};
-
-// Reset extraction mutation
-export const useResetExtraction = () => {
-  return useMutation({
-    mutationFn: ExtractionService.resetExtraction,
-    onSuccess: () => {
-      invalidateQueries.extraction.all();
-      invalidateQueries.questions.all();
-    },
-  });
-};
-
-// Retry failed page mutation
-export const useRetryFailedPage = () => {
-  return useMutation({
-    mutationFn: (pageNumber: number) =>
-      ExtractionService.retryFailedPage(pageNumber),
-    onSuccess: () => {
-      invalidateQueries.extraction.all();
-      invalidateQueries.questions.all();
-    },
-  });
-};
-
-// Retry all failed pages mutation
-export const useRetryAllFailedPages = () => {
-  return useMutation({
-    mutationFn: ExtractionService.retryAllFailedPages,
+    mutationFn: ExtractionService.clearExtractionState,
     onSuccess: () => {
       invalidateQueries.extraction.all();
       invalidateQueries.questions.all();

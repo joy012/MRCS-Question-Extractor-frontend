@@ -7,7 +7,7 @@ import { AppLayout } from '../components/layout/AppLayout';
 const Dashboard = lazy(() => import('../pages/Dashboard'));
 const QuestionsList = lazy(() => import('../pages/Questions/QuestionsPage'));
 const QuestionDetail = lazy(() => import('../pages/Questions/QuestionDetail'));
-const ExtractionMonitor = lazy(() => import('../pages/ExtractionMonitor'));
+const ExtractionMonitor = lazy(() => import('../pages/Extraction/ExtractionMonitor'));
 const CategoriesPage = lazy(() => import('../pages/Categories/CategoriesPage'));
 const IntakesPage = lazy(() => import('../pages/Intakes/IntakesPage'));
 const Settings = lazy(() => import('../pages/Settings/Settings'));

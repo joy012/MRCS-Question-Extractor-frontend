@@ -1,4 +1,4 @@
-import type { Intake } from '../types/question';
+import type { Intake } from '@/types';
 import { apiClient } from './client';
 
 export interface CreateIntakeDto {

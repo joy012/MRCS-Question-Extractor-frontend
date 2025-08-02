@@ -1,15 +1,20 @@
-import { Download, Plus } from 'lucide-react';
+import {
+  BookOpen,
+  Download,
+  Filter,
+  Plus
+} from 'lucide-react';
 import { useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../../components/ui/button';
 import { Card, CardContent } from '../../components/ui/card';
 import {
-  useDeleteQuestion,
-  useQuestionCategories,
-  useQuestions,
-  useQuestionStatistics,
-  useUpdateQuestionStatus
-} from '../../hooks/useQuestions';
+  useDeleteQuestionMutation,
+  useGetQuestionCategoriesQuery,
+  useGetQuestionsQuery,
+  useGetQuestionStatisticsQuery,
+  useUpdateQuestionStatusMutation
+} from '../../services/queries/useQuestions';
 import { QuestionStatus } from '../../types';
 import { QuestionsFilters } from './components/QuestionsFilters';
 import { QuestionsList } from './components/QuestionsList';
@@ -24,7 +29,7 @@ const QuestionsPage = () => {
   const { handleSearch, handleStatusFilter, handleCategoryFilter, handleIntakeFilter, handleYearFilter, handleSort, handleSortOrder, handlePageChange } = handlers;
 
   // API hooks
-  const questionsQuery = useQuestions({
+  const questionsQuery = useGetQuestionsQuery({
     page: currentPage,
     limit: itemsPerPage,
     search: searchTerm,
@@ -36,11 +41,11 @@ const QuestionsPage = () => {
     sortOrder
   });
 
-  const { data: categories } = useQuestionCategories();
-  const { data: questionStats } = useQuestionStatistics();
-  const deleteMutation = useDeleteQuestion();
-  const approveMutation = useUpdateQuestionStatus();
-  const rejectMutation = useUpdateQuestionStatus();
+  const { data: categories } = useGetQuestionCategoriesQuery();
+  const { data: questionStats } = useGetQuestionStatisticsQuery();
+  const deleteMutation = useDeleteQuestionMutation();
+  const approveMutation = useUpdateQuestionStatusMutation();
+  const rejectMutation = useUpdateQuestionStatusMutation();
 
   // Handlers
   const handleEdit = useCallback((question: ExtendedQuestion) => {
@@ -80,27 +85,48 @@ const QuestionsPage = () => {
   };
 
   return (
-    <div className="space-y-6 w-full">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Questions Management</h1>
-          <p className="text-muted-foreground">
-            Browse, filter, and manage extracted questions
-          </p>
-        </div>
+    <div className="space-y-8 w-full">
+      {/* Hero Section */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 border border-indigo-100/50">
+        <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+        <div className="relative p-8">
+          <div className="flex items-start justify-between">
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg">
+                  <BookOpen className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+                    Questions Management
+                  </h1>
+                  <p className="text-gray-600 mt-1">
+                    Browse, filter, and manage extracted questions with advanced AI-powered insights
+                  </p>
+                </div>
+              </div>
+            </div>
 
-        <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={handleExport}>
-            <Download className="w-4 h-4 mr-2" />
-            Export
-          </Button>
-          <Button asChild>
-            <Link to="/questions/new">
-              <Plus className="w-4 h-4 mr-2" />
-              Add Question
-            </Link>
-          </Button>
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={handleExport}
+                className="bg-white/80 backdrop-blur-sm border-gray-200 hover:bg-white hover:border-gray-300 shadow-sm"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Export
+              </Button>
+              <Button
+                asChild
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-200"
+              >
+                <Link to="/questions/new">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Question
+                </Link>
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -113,8 +139,14 @@ const QuestionsPage = () => {
       />
 
       {/* Filters */}
-      <Card>
-        <CardContent className='py-2'>
+      <Card className="border-0 shadow-lg bg-gradient-to-br from-gray-50 to-gray-100/50">
+        <CardContent className='p-6'>
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
+              <Filter className="h-4 w-4 text-indigo-600" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900">Advanced Filters</h3>
+          </div>
           <QuestionsFilters
             searchTerm={searchTerm}
             onSearchChange={handleSearch}

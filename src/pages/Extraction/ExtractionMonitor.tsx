@@ -1,19 +1,72 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
+import React from 'react';
+import { Card, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
+import { useToastHelpers } from '../../components/ui/toast';
+import { useClearExtractionStateMutation, useGetExtractionLogsQuery, useGetExtractionStatusQuery } from '../../services/queries/useExtraction';
+import {
+  ExtractionHeader,
+  ExtractionLogs,
+  ExtractionStatistics,
+  ExtractionStatus,
+} from './components';
 
-const ExtractionMonitor = () => {
+const ExtractionMonitor: React.FC = () => {
+  const { data: extractionState = null } = useGetExtractionStatusQuery();
+  const { data: logs = { logs: [] } } = useGetExtractionLogsQuery();
+  const clearExtractionMutation = useClearExtractionStateMutation();
+  const { success, error } = useToastHelpers();
+
+  const handleRefresh = () => {
+    window.location.reload();
+  };
+
+  const handleClearState = async () => {
+    try {
+      await clearExtractionMutation.mutateAsync();
+      success('Success', 'Extraction state cleared');
+    } catch (err: any) {
+      console.error('Failed to clear extraction state:', err);
+      error('Error', 'Failed to clear extraction state');
+    }
+  };
+
+  // Loading state
+  if (!extractionState) {
+    return (
+      <div className="space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Extraction Monitor</CardTitle>
+            <CardDescription>Loading...</CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    );
+  }
+
+  const isProcessing = extractionState.status === 'processing';
+
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Extraction Monitor</CardTitle>
-          <CardDescription>
-            Monitor and control the question extraction process
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>Extraction monitoring functionality will be implemented here.</p>
-        </CardContent>
-      </Card>
+      {/* Header with controls */}
+      <ExtractionHeader
+        isProcessing={isProcessing}
+        onRefresh={handleRefresh}
+      />
+
+      {/* Current Status */}
+      <ExtractionStatus
+        extractionState={extractionState}
+        onClearState={handleClearState}
+      />
+
+      {/* Statistics */}
+      <ExtractionStatistics extractionState={extractionState} />
+
+      {/* Logs */}
+      <ExtractionLogs
+        logs={logs.logs}
+        isProcessing={isProcessing}
+      />
     </div>
   );
 };

@@ -1,4 +1,9 @@
-import { BookOpen, FileText } from 'lucide-react';
+import {
+  AlertCircle,
+  BarChart3,
+  BookOpen,
+  RefreshCw
+} from 'lucide-react';
 import { EmptyState } from '../../../components/common/EmptyState';
 import { Button } from '../../../components/ui/button';
 import { Card, CardContent } from '../../../components/ui/card';
@@ -11,7 +16,7 @@ import { QuestionCard } from './QuestionCard';
 const QuestionsGridSkeleton = () => (
   <div className="space-y-4">
     {[...Array(6)].map((_, i) => (
-      <Card key={i}>
+      <Card key={i} className="border-0 shadow-sm bg-gradient-to-br from-gray-50 to-gray-100/50">
         <CardContent className="p-6">
           <div className="flex items-start gap-6">
             <div className="flex-1 space-y-3">
@@ -47,17 +52,20 @@ const QuestionsGridSkeleton = () => (
 
 // Error state component
 const QuestionsError = ({ error, onRetry }: { error: Error; onRetry: () => void }) => (
-  <Card>
+  <Card className="border-0 shadow-lg bg-gradient-to-br from-red-50 to-red-100/50">
     <CardContent className="pt-6">
       <div className="text-center py-8">
-        <FileText className="h-8 w-8 mx-auto mb-2 text-muted-foreground opacity-50" />
-        <p className="text-muted-foreground mb-2">Failed to load questions</p>
-        <p className="text-sm text-destructive">{error.message}</p>
+        <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+          <AlertCircle className="h-8 w-8 text-red-600" />
+        </div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">Failed to load questions</h3>
+        <p className="text-sm text-red-600 mb-4">{error.message}</p>
         <Button
           variant="outline"
           onClick={onRetry}
-          className="mt-4"
+          className="bg-white/80 backdrop-blur-sm border-gray-200 hover:bg-white hover:border-gray-300"
         >
+          <RefreshCw className="w-4 h-4 mr-2" />
           Try Again
         </Button>
       </div>
@@ -124,7 +132,22 @@ export const QuestionsList = ({
   }
 
   return (
-    <div>
+    <div className="space-y-6">
+      {/* Results Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
+            <BarChart3 className="h-4 w-4 text-indigo-600" />
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900">Question Results</h3>
+            <p className="text-sm text-gray-500">
+              Showing {questions.length} of {totalItems} questions
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Pagination - Always visible at top */}
       {totalPages > 1 && (
         <Pagination

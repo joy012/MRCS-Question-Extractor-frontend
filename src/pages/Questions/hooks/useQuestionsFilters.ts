@@ -22,7 +22,7 @@ export const useQuestionsFilters = () => {
     searchParams.get('year') || 'all'
   );
   const [sortBy, setSortBy] = useState(
-    searchParams.get('sortBy') || 'examYear'
+    searchParams.get('sortBy') || 'createdAt'
   );
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>(
     (searchParams.get('sortOrder') as 'asc' | 'desc') || 'desc'

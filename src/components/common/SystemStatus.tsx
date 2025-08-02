@@ -1,6 +1,6 @@
 import { AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
-import { useValidateSystem } from '../../hooks/useExtraction';
 
+import { useValidateSystemQuery } from '@/services/queries/useExtraction';
 import { Badge } from '../ui/badge';
 
 export interface SystemStatusProps {
@@ -10,7 +10,7 @@ export interface SystemStatusProps {
 
 export const SystemStatus = ({ showDetails = false, className = '' }: SystemStatusProps) => {
 
-  const { data: systemValidation, isLoading: validationLoading } = useValidateSystem();
+  const { data: systemValidation, isLoading: validationLoading } = useValidateSystemQuery();
 
   // Determine overall system status
   const getSystemStatus = () => {

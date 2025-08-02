@@ -1,15 +1,22 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { QuestionsService } from '../api';
-import { invalidateQueries, queryKeys } from '../lib/query-client';
+import { invalidateQueries, queryKeys } from '../../lib/query-client';
+import {
+  GET_QUESTIONS_BY_CATEGORY,
+  GET_QUESTIONS_BY_INTAKE,
+  GET_QUESTIONS_BY_STATUS,
+  GET_QUESTIONS_BY_YEAR,
+  GET_RECENT_QUESTIONS,
+} from '../../lib/query-keys';
 import type {
   CreateQuestionData,
   QuestionSearchParams,
   QuestionStatus,
   UpdateQuestionData,
-} from '../types';
+} from '../../types';
+import { QuestionsService } from '../api';
 
 // Get questions with pagination and filtering
-export const useQuestions = (params: QuestionSearchParams = {}) => {
+export const useGetQuestionsQuery = (params: QuestionSearchParams = {}) => {
   return useQuery({
     queryKey: queryKeys.questions.list(params),
     queryFn: () => QuestionsService.getQuestions(params),
@@ -17,7 +24,7 @@ export const useQuestions = (params: QuestionSearchParams = {}) => {
 };
 
 // Get a single question
-export const useQuestion = (id: string) => {
+export const useGetQuestionQuery = (id: string) => {
   return useQuery({
     queryKey: queryKeys.questions.byId(id),
     queryFn: () => QuestionsService.getQuestion(id),
@@ -26,7 +33,7 @@ export const useQuestion = (id: string) => {
 };
 
 // Get question statistics
-export const useQuestionStatistics = () => {
+export const useGetQuestionStatisticsQuery = () => {
   return useQuery({
     queryKey: queryKeys.questions.statistics(),
     queryFn: QuestionsService.getStatistics,
@@ -35,7 +42,7 @@ export const useQuestionStatistics = () => {
 };
 
 // Get categories
-export const useQuestionCategories = () => {
+export const useGetQuestionCategoriesQuery = () => {
   return useQuery({
     queryKey: queryKeys.questions.categories(),
     queryFn: QuestionsService.getCategories,
@@ -44,7 +51,7 @@ export const useQuestionCategories = () => {
 };
 
 // Get years
-export const useQuestionYears = () => {
+export const useGetQuestionYearsQuery = () => {
   return useQuery({
     queryKey: queryKeys.questions.years(),
     queryFn: QuestionsService.getYears,
@@ -53,7 +60,7 @@ export const useQuestionYears = () => {
 };
 
 // Get intakes
-export const useQuestionIntakes = () => {
+export const useGetQuestionIntakesQuery = () => {
   return useQuery({
     queryKey: queryKeys.questions.intakes(),
     queryFn: QuestionsService.getIntakes,
@@ -62,7 +69,7 @@ export const useQuestionIntakes = () => {
 };
 
 // Create question mutation
-export const useCreateQuestion = () => {
+export const useCreateQuestionMutation = () => {
   return useMutation({
     mutationFn: (data: CreateQuestionData) =>
       QuestionsService.createQuestion(data),
@@ -73,7 +80,7 @@ export const useCreateQuestion = () => {
 };
 
 // Create multiple questions mutation
-export const useCreateQuestions = () => {
+export const useCreateQuestionsMutation = () => {
   return useMutation({
     mutationFn: (data: CreateQuestionData[]) =>
       QuestionsService.createQuestions(data),
@@ -84,7 +91,7 @@ export const useCreateQuestions = () => {
 };
 
 // Update question mutation
-export const useUpdateQuestion = () => {
+export const useUpdateQuestionMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -100,7 +107,7 @@ export const useUpdateQuestion = () => {
 };
 
 // Delete question mutation
-export const useDeleteQuestion = () => {
+export const useDeleteQuestionMutation = () => {
   return useMutation({
     mutationFn: (id: string) => QuestionsService.deleteQuestion(id),
     onSuccess: () => {
@@ -110,7 +117,7 @@ export const useDeleteQuestion = () => {
 };
 
 // Update question status mutation
-export const useUpdateQuestionStatus = () => {
+export const useUpdateQuestionStatusMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -126,7 +133,7 @@ export const useUpdateQuestionStatus = () => {
 };
 
 // Bulk update status mutation
-export const useBulkUpdateStatus = () => {
+export const useBulkUpdateStatusMutation = () => {
   return useMutation({
     mutationFn: ({
       questionIds,
@@ -142,16 +149,16 @@ export const useBulkUpdateStatus = () => {
 };
 
 // Get recent questions
-export const useRecentQuestions = (limit: number = 10) => {
+export const useGetRecentQuestionsQuery = (limit: number = 10) => {
   return useQuery({
-    queryKey: ['questions', 'recent', limit],
+    queryKey: [GET_RECENT_QUESTIONS, limit],
     queryFn: () => QuestionsService.getRecentQuestions(limit),
     staleTime: 2 * 60 * 1000,
   });
 };
 
 // Get questions by category
-export const useQuestionsByCategory = (
+export const useGetQuestionsByCategoryQuery = (
   categoryId: string,
   options: {
     page?: number;
@@ -161,14 +168,14 @@ export const useQuestionsByCategory = (
   } = {}
 ) => {
   return useQuery({
-    queryKey: ['questions', 'category', categoryId, options],
+    queryKey: [GET_QUESTIONS_BY_CATEGORY, categoryId, options],
     queryFn: () => QuestionsService.getQuestionsByCategory(categoryId, options),
     enabled: !!categoryId,
   });
 };
 
 // Get questions by year
-export const useQuestionsByYear = (
+export const useGetQuestionsByYearQuery = (
   year: number,
   options: {
     page?: number;
@@ -178,13 +185,13 @@ export const useQuestionsByYear = (
   } = {}
 ) => {
   return useQuery({
-    queryKey: ['questions', 'year', year, options],
+    queryKey: [GET_QUESTIONS_BY_YEAR, year, options],
     queryFn: () => QuestionsService.getQuestionsByYear(year, options),
   });
 };
 
 // Get questions by intake
-export const useQuestionsByIntake = (
+export const useGetQuestionsByIntakeQuery = (
   intakeId: string,
   options: {
     page?: number;
@@ -194,14 +201,14 @@ export const useQuestionsByIntake = (
   } = {}
 ) => {
   return useQuery({
-    queryKey: ['questions', 'intake', intakeId, options],
+    queryKey: [GET_QUESTIONS_BY_INTAKE, intakeId, options],
     queryFn: () => QuestionsService.getQuestionsByIntake(intakeId, options),
     enabled: !!intakeId,
   });
 };
 
 // Get questions by status
-export const useQuestionsByStatus = (
+export const useGetQuestionsByStatusQuery = (
   status: QuestionStatus,
   options: {
     page?: number;
@@ -211,7 +218,7 @@ export const useQuestionsByStatus = (
   } = {}
 ) => {
   return useQuery({
-    queryKey: ['questions', 'status', status, options],
+    queryKey: [GET_QUESTIONS_BY_STATUS, status, options],
     queryFn: () => QuestionsService.getQuestionsByStatus(status, options),
   });
 };

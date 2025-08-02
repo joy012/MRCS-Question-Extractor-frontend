@@ -38,7 +38,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Separator } from '../../components/ui/separator';
 import { Skeleton } from '../../components/ui/skeleton';
 import { Textarea } from '../../components/ui/textarea';
-import { useDeleteQuestion, useQuestion, useUpdateQuestion } from '../../hooks/useQuestions';
+import { useDeleteQuestionMutation, useGetQuestionQuery, useUpdateQuestionMutation } from '../../services/queries/useQuestions';
 import type { Question, QuestionStatus, UpdateQuestionData } from '../../types';
 
 const QuestionDetail = () => {
@@ -48,9 +48,9 @@ const QuestionDetail = () => {
   const [editForm, setEditForm] = useState<Partial<Question>>({});
 
   // API hooks
-  const { data: question, isLoading, error } = useQuestion(id!);
-  const updateMutation = useUpdateQuestion();
-  const deleteMutation = useDeleteQuestion();
+  const { data: question, isLoading, error } = useGetQuestionQuery(id!);
+  const updateMutation = useUpdateQuestionMutation();
+  const deleteMutation = useDeleteQuestionMutation();
 
   // Initialize edit form when question loads
   React.useEffect(() => {

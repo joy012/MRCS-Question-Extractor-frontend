@@ -1,9 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  Tag,
+  ToggleLeft,
+  Type,
+  Zap
+} from 'lucide-react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../../../components/ui/form';
 import { Input } from '../../../../components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../../components/ui/select';
+import { Switch } from '../../../../components/ui/switch';
 import { categorySchema, type CategoryFormData } from './types';
 
 interface CategoryFormProps {
@@ -35,84 +42,136 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 
   return (
     <Form {...form}>
-      <form id="category-form" onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
+      <form id="category-form" onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+        {/* Basic Information Section */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
+              <Tag className="h-4 w-4 text-blue-600" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900">Basic Information</h3>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                    <Type className="h-4 w-4" />
+                    Name (Slug)
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="e.g., basic-sciences"
+                      disabled={isEdit}
+                      className="bg-white/80 backdrop-blur-sm border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 transition-all duration-200"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="displayName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                    <Tag className="h-4 w-4" />
+                    Display Name
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="e.g., Basic Sciences"
+                      className="bg-white/80 backdrop-blur-sm border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 transition-all duration-200"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
+        {/* Category Type Section */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center">
+              <Zap className="h-4 w-4 text-purple-600" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900">Category Type</h3>
+          </div>
+
           <FormField
             control={form.control}
-            name="name"
+            name="type"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name (Slug)</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="e.g., basic-sciences"
-                    disabled={isEdit}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="displayName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Display Name</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="e.g., Basic Sciences"
-                    {...field}
-                  />
-                </FormControl>
+                <FormLabel className="text-sm font-medium text-gray-700">
+                  Type
+                </FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger className="bg-white/80 backdrop-blur-sm border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 transition-all duration-200">
+                      <SelectValue placeholder="Select category type" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="BASIC" className="hover:bg-blue-50">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        Basic Sciences
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="CLINICAL" className="hover:bg-green-50">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        Clinical
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
 
-        <FormField
-          control={form.control}
-          name="type"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Type</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select category type" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="BASIC">Basic Sciences</SelectItem>
-                  <SelectItem value="CLINICAL">Clinical</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {/* Status Section */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center">
+              <ToggleLeft className="h-4 w-4 text-green-600" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900">Status</h3>
+          </div>
 
-        <FormField
-          control={form.control}
-          name="isActive"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-              <FormControl>
-                <input
-                  type="checkbox"
-                  checked={field.value}
-                  onChange={field.onChange}
-                  className="rounded"
-                />
-              </FormControl>
-              <div className="space-y-1 leading-none">
-                <FormLabel>Active</FormLabel>
-              </div>
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="isActive"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between p-4 bg-gradient-to-r from-gray-50/50 to-blue-50/50 rounded-xl border border-gray-200/50">
+                <div className="space-y-1">
+                  <FormLabel className="text-sm font-medium text-gray-900">Active</FormLabel>
+                  <p className="text-xs text-gray-500">
+                    Enable this category for question organization
+                  </p>
+                </div>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    className="data-[state=checked]:bg-green-600"
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        </div>
       </form>
     </Form>
   );

@@ -10,7 +10,7 @@ import type {
   QuestionStatus,
   UpdateQuestionData,
   YearInfo,
-} from '../types';
+} from '@/types';
 import { api } from './client';
 
 export class QuestionsService {

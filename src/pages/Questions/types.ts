@@ -1,4 +1,4 @@
-import type { Question } from '../../types';
+import type { CategoryInfo, IntakeInfo, Question, YearInfo } from '../../types';
 
 // Extended Question interface to include extraction metadata
 export interface ExtendedQuestion extends Question {
@@ -47,9 +47,9 @@ export interface QuestionsFiltersProps {
   onSortChange: (value: string) => void;
   sortOrder: 'asc' | 'desc';
   onSortOrderChange: (value: 'asc' | 'desc') => void;
-  categories?: any[];
-  intakes?: any[];
-  years?: any[];
+  categories?: CategoryInfo[];
+  intakes?: IntakeInfo[];
+  years?: YearInfo[];
 }
 
 // Statistics data
