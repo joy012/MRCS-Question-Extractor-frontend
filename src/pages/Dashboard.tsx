@@ -63,9 +63,9 @@ const Dashboard = () => {
 
   // Calculate derived data
   const totalQuestions = questionStats?.total || 0;
-  const approvedQuestions = questionStats?.byStatus?.approved || 0;
-  const pendingQuestions = questionStats?.byStatus?.pending || 0;
-  const rejectedQuestions = questionStats?.byStatus?.rejected || 0;
+  const approvedQuestions = questionStats?.byStatus?.APPROVED || 0;
+  const pendingQuestions = questionStats?.byStatus?.PENDING || 0;
+  const rejectedQuestions = questionStats?.byStatus?.REJECTED || 0;
   const totalCategories = categories?.length || 0;
   const totalIntakes = intakes?.length || 0;
 
@@ -396,8 +396,8 @@ const Dashboard = () => {
                       </p>
                     </div>
                     <Badge
-                      variant={question.status === 'approved' ? 'default' : 'secondary'}
-                      className={question.status === 'approved' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}
+                      variant={question.status === 'APPROVED' ? 'default' : 'secondary'}
+                      className={question.status === 'APPROVED' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}
                     >
                       {question.status}
                     </Badge>

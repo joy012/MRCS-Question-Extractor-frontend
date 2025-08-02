@@ -25,18 +25,19 @@ import type { ExtendedQuestion } from './types';
 const QuestionsPage = () => {
   // Custom hooks
   const { filterState, handlers } = useQuestionsFilters();
-  const { searchTerm, statusFilter, categoryFilter, intakeFilter, yearFilter, sortBy, sortOrder, currentPage, itemsPerPage } = filterState;
-  const { handleSearch, handleStatusFilter, handleCategoryFilter, handleIntakeFilter, handleYearFilter, handleSort, handleSortOrder, handlePageChange } = handlers;
+  const { searchTerm, statusFilter, categoryFilter, intakeFilter, yearFilter, confidenceFilter, sortBy, sortOrder, currentPage, itemsPerPage } = filterState;
+  const { handleSearch, handleStatusFilter, handleCategoryFilter, handleIntakeFilter, handleYearFilter, handleConfidenceFilter, handleSort, handleSortOrder, handlePageChange } = handlers;
 
   // API hooks
   const questionsQuery = useGetQuestionsQuery({
     page: currentPage,
     limit: itemsPerPage,
     search: searchTerm,
-    status: statusFilter === 'all' ? undefined : statusFilter as QuestionStatus,
+    status: statusFilter === 'all' ? undefined : statusFilter.toUpperCase() as QuestionStatus,
     categories: categoryFilter !== 'all' ? [categoryFilter] : undefined,
     intake: intakeFilter !== 'all' ? intakeFilter : undefined,
     year: yearFilter !== 'all' ? parseInt(yearFilter) : undefined,
+    minConfidence: confidenceFilter !== 'all' ? parseInt(confidenceFilter) : undefined,
     sortBy,
     sortOrder
   });
@@ -74,8 +75,8 @@ const QuestionsPage = () => {
   const totalQuestions = questionsQuery.data?.meta?.total || 0;
   const totalPages = questionsQuery.data?.meta?.totalPages || 1;
   const questions = questionsQuery.data?.data || [];
-  const verifiedCount = questionStats?.byStatus?.approved || 0;
-  const pendingCount = questionStats?.byStatus?.pending || 0;
+  const verifiedCount = questionStats?.byStatus?.APPROVED || 0;
+  const pendingCount = questionStats?.byStatus?.PENDING || 0;
 
   const actions = {
     onEdit: handleEdit,
@@ -158,6 +159,8 @@ const QuestionsPage = () => {
             onIntakeFilterChange={handleIntakeFilter}
             yearFilter={yearFilter}
             onYearFilterChange={handleYearFilter}
+            confidenceFilter={confidenceFilter}
+            onConfidenceFilterChange={handleConfidenceFilter}
             sortBy={sortBy}
             onSortChange={handleSort}
             sortOrder={sortOrder}

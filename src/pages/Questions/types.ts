@@ -43,6 +43,8 @@ export interface QuestionsFiltersProps {
   onIntakeFilterChange: (value: string) => void;
   yearFilter: string;
   onYearFilterChange: (value: string) => void;
+  confidenceFilter: string;
+  onConfidenceFilterChange: (value: string) => void;
   sortBy: string;
   onSortChange: (value: string) => void;
   sortOrder: 'asc' | 'desc';
@@ -75,6 +77,7 @@ export interface FilterState {
   categoryFilter: string;
   intakeFilter: string;
   yearFilter: string;
+  confidenceFilter: string;
   sortBy: string;
   sortOrder: 'asc' | 'desc';
   currentPage: number;

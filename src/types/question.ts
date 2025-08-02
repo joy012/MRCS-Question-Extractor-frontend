@@ -1,9 +1,9 @@
 import type { PaginatedResponse } from './common';
 
 export const QuestionStatus = {
-  PENDING: 'pending',
-  APPROVED: 'approved',
-  REJECTED: 'rejected',
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
 } as const;
 
 export type QuestionStatus =
@@ -99,6 +99,7 @@ export interface QuestionFilters {
   intake?: string;
   status?: QuestionStatus;
   search?: string;
+  minConfidence?: number;
 }
 
 export interface QuestionSearchParams extends QuestionFilters {
@@ -106,6 +107,7 @@ export interface QuestionSearchParams extends QuestionFilters {
   limit?: number;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
+  minConfidence?: number;
 }
 
 export type QuestionsResponse = PaginatedResponse<Question>;

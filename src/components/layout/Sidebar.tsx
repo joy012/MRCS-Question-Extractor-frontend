@@ -72,8 +72,8 @@ export const Sidebar = () => {
 
   // Calculate derived data
   const totalQuestions = questionStats?.total || 0;
-  const approvedQuestions = questionStats?.byStatus?.approved || 0;
-  const pendingQuestions = questionStats?.byStatus?.pending || 0;
+  const approvedQuestions = questionStats?.byStatus?.APPROVED || 0;
+  const pendingQuestions = questionStats?.byStatus?.PENDING || 0;
 
   // Get extraction status for badge
   const getExtractionBadge = () => {

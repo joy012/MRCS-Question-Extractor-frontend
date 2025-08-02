@@ -9,9 +9,10 @@ export const useQuestionsFilters = () => {
   const [searchTerm, setSearchTerm] = useState(
     searchParams.get('search') || ''
   );
-  const [statusFilter, setStatusFilter] = useState(
-    searchParams.get('status') || 'all'
-  );
+  const [statusFilter, setStatusFilter] = useState(() => {
+    const status = searchParams.get('status') || 'all';
+    return status === 'all' ? 'all' : status.toUpperCase();
+  });
   const [categoryFilter, setCategoryFilter] = useState(
     searchParams.get('category') || 'all'
   );
@@ -20,6 +21,9 @@ export const useQuestionsFilters = () => {
   );
   const [yearFilter, setYearFilter] = useState(
     searchParams.get('year') || 'all'
+  );
+  const [confidenceFilter, setConfidenceFilter] = useState(
+    searchParams.get('minConfidence') || 'all'
   );
   const [sortBy, setSortBy] = useState(
     searchParams.get('sortBy') || 'createdAt'
@@ -60,9 +64,13 @@ export const useQuestionsFilters = () => {
 
   const handleStatusFilter = useCallback(
     (value: string) => {
-      setStatusFilter(value);
+      const normalizedValue = value === 'all' ? 'all' : value.toUpperCase();
+      setStatusFilter(normalizedValue);
       setCurrentPage(1);
-      updateUrlParams({ status: value === 'all' ? '' : value, page: '1' });
+      updateUrlParams({
+        status: normalizedValue === 'all' ? '' : normalizedValue,
+        page: '1',
+      });
     },
     [updateUrlParams]
   );
@@ -90,6 +98,18 @@ export const useQuestionsFilters = () => {
       setYearFilter(value);
       setCurrentPage(1);
       updateUrlParams({ year: value === 'all' ? '' : value, page: '1' });
+    },
+    [updateUrlParams]
+  );
+
+  const handleConfidenceFilter = useCallback(
+    (value: string) => {
+      setConfidenceFilter(value);
+      setCurrentPage(1);
+      updateUrlParams({
+        minConfidence: value === 'all' ? '' : value,
+        page: '1',
+      });
     },
     [updateUrlParams]
   );
@@ -124,6 +144,7 @@ export const useQuestionsFilters = () => {
     categoryFilter,
     intakeFilter,
     yearFilter,
+    confidenceFilter,
     sortBy,
     sortOrder,
     currentPage,
@@ -138,6 +159,7 @@ export const useQuestionsFilters = () => {
       handleCategoryFilter,
       handleIntakeFilter,
       handleYearFilter,
+      handleConfidenceFilter,
       handleSort,
       handleSortOrder,
       handlePageChange,

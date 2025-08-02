@@ -99,7 +99,7 @@ const Settings = () => {
                 <Activity className="h-6 w-6 text-green-600" />
               </div>
               <div className="text-2xl font-bold text-green-600">
-                {questionStats?.byStatus?.approved?.toLocaleString() || '0'}
+                {questionStats?.byStatus?.APPROVED?.toLocaleString() || '0'}
               </div>
               <p className="text-sm text-gray-600">Approved Questions</p>
             </div>
