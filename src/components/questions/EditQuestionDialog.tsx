@@ -30,8 +30,8 @@ export const EditQuestionDialog: React.FC<EditQuestionDialogProps> = ({
     correctAnswer: question.correctAnswer as 'A' | 'B' | 'C' | 'D' | 'E',
     description: question.description || '',
     year: question.year,
-    intake: question.intake._id,
-    categories: question.categories.map(cat => cat._id),
+    intake: question.intake.id,
+    categories: question.categories.map(cat => cat.id),
     explanation: question.explanation || '',
     status: question.status as 'PENDING' | 'APPROVED' | 'REJECTED',
   };

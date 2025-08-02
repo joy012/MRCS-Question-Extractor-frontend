@@ -63,8 +63,8 @@ const QuestionDetail = () => {
   const confidence = useMemo(() => question?.aiMetadata?.confidence || 0, [question?.aiMetadata?.confidence]);
   const statusColor = useMemo(() => {
     switch (question?.status) {
-      case 'approved': return 'bg-green-100 text-green-800 border-green-200';
-      case 'rejected': return 'bg-red-100 text-red-800 border-red-200';
+      case 'APPROVED': return 'bg-green-100 text-green-800 border-green-200';
+      case 'REJECTED': return 'bg-red-100 text-red-800 border-red-200';
       default: return 'bg-yellow-100 text-yellow-800 border-yellow-200';
     }
   }, [question?.status]);
@@ -88,7 +88,7 @@ const QuestionDetail = () => {
         question: editForm.question,
         options: editForm.options,
         correctAnswer: editForm.correctAnswer,
-        categories: editForm.categories?.map(cat => cat._id),
+        categories: editForm.categories?.map(cat => cat.id),
         year: editForm.year,
         explanation: editForm.explanation,
         status: editForm.status,
@@ -253,7 +253,7 @@ const QuestionDetail = () => {
                 <Edit className="w-4 h-4 mr-2" />
                 Edit
               </Button>
-              {question.status === 'pending' && (
+              {question.status === 'PENDING' && (
                 <>
                   <Button variant="default" size="sm" onClick={handleApprove}>
                     <CheckCircle className="w-4 h-4 mr-2" />
@@ -326,9 +326,9 @@ const QuestionDetail = () => {
                     variant="outline"
                     className={`${statusColor} border`}
                   >
-                    {question.status === 'approved' && <CheckCircle className="w-3 h-3 mr-1" />}
-                    {question.status === 'rejected' && <AlertCircle className="w-3 h-3 mr-1" />}
-                    {question.status === 'pending' && <Clock className="w-3 h-3 mr-1" />}
+                    {question.status === 'APPROVED' && <CheckCircle className="w-3 h-3 mr-1" />}
+                    {question.status === 'REJECTED' && <AlertCircle className="w-3 h-3 mr-1" />}
+                    {question.status === 'PENDING' && <Clock className="w-3 h-3 mr-1" />}
                     {question.status.charAt(0).toUpperCase() + question.status.slice(1)}
                   </Badge>
                   {confidence > 0 && (
@@ -461,7 +461,7 @@ const QuestionDetail = () => {
                 ) : (
                   <div className="flex flex-wrap gap-2">
                     {question.categories.map((category) => (
-                      <Badge key={category._id} variant="secondary" className="text-xs">
+                      <Badge key={category.id} variant="secondary" className="text-xs">
                         {category.displayName}
                       </Badge>
                     ))}
@@ -602,7 +602,7 @@ const QuestionDetail = () => {
               </Button>
 
               <Button variant="outline" size="sm" className="w-full justify-start" asChild>
-                <Link to={`/questions?intake=${question.intake._id}`}>
+                <Link to={`/questions?intake=${question.intake.id}`}>
                   <Users className="w-4 h-4 mr-2" />
                   {question.intake.displayName} Questions
                 </Link>

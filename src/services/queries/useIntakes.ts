@@ -26,7 +26,7 @@ export const useGetIntakesOptionsQuery = () => {
 
   const options =
     intakes?.map((intake: Intake) => ({
-      value: intake._id,
+      value: intake.id,
       label: intake.displayName,
       color: intake.color,
       icon: intake.icon,

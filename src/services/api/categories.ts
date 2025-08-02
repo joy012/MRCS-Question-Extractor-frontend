@@ -94,6 +94,11 @@ export class CategoriesService {
   static async seedCategories(): Promise<{ message: string }> {
     return api.post<{ message: string }>('/categories/seed');
   }
+
+  // Sync question counts for all categories
+  static async syncQuestionCounts(): Promise<{ message: string }> {
+    return api.post<{ message: string }>('/categories/sync-question-counts');
+  }
 }
 
 export default CategoriesService;

@@ -20,7 +20,7 @@ export const AppLayout = () => {
           </div>
 
           {/* Main content - full width with proper scrolling */}
-          <main className="flex-1 overflow-auto w-full bg-white/50 backdrop-blur-sm">
+          <main className="flex-1 overflow-auto w-full bg-white/50 backdrop-blur-sm mb-4">
             <div className="w-full h-full p-6">
               <Outlet />
             </div>

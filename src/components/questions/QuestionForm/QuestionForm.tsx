@@ -196,7 +196,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
                   </FormControl>
                   <SelectContent>
                     {intakes.map((intake) => (
-                      <SelectItem key={intake._id} value={intake._id}>
+                      <SelectItem key={intake.id} value={intake.id}>
                         {intake.displayName}
                       </SelectItem>
                     ))}
@@ -217,16 +217,16 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
               <FormControl>
                 <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto">
                   {categories.map((category) => (
-                    <label key={category._id} className="flex items-center space-x-2">
+                    <label key={category.id} className="flex items-center space-x-2">
                       <input
                         type="checkbox"
-                        checked={field.value?.includes(category._id)}
+                        checked={field.value?.includes(category.id)}
                         onChange={(e) => {
                           const currentCategories = field.value || [];
                           if (e.target.checked) {
-                            field.onChange([...currentCategories, category._id]);
+                            field.onChange([...currentCategories, category.id]);
                           } else {
-                            field.onChange(currentCategories.filter(id => id !== category._id));
+                            field.onChange(currentCategories.filter(id => id !== category.id));
                           }
                         }}
                         className="rounded"

@@ -4,12 +4,13 @@ import {
   CheckCircle,
   Edit,
   Plus,
+  RefreshCw,
   RotateCcw,
   Shield,
   Trash2,
   XCircle
 } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { Alert, AlertDescription } from '../../components/ui/alert';
 import { Badge } from '../../components/ui/badge';
@@ -19,6 +20,7 @@ import { Skeleton } from '../../components/ui/skeleton';
 import { DEFAULT_CATEGORIES } from '../../constants/categories';
 import { getCardColorClasses } from '../../lib/utils';
 import type { Category } from '../../services/api/categories';
+import { CategoriesService } from '../../services/api/categories';
 import {
   useCreateCategoryMutation,
   useDeleteCategoryMutation,
@@ -34,7 +36,7 @@ import {
 } from './components';
 
 const CategoriesPage: React.FC = () => {
-  const { data: categories = [], isLoading: loading } = useGetCategoriesQuery();
+  const { data: categories = [], isLoading: loading, refetch } = useGetCategoriesQuery();
   const createCategoryMutation = useCreateCategoryMutation();
   const updateCategoryMutation = useUpdateCategoryMutation();
   const deleteCategoryMutation = useDeleteCategoryMutation();
@@ -45,6 +47,42 @@ const CategoriesPage: React.FC = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  // Sync question counts on page load
+  useEffect(() => {
+    const syncQuestionCounts = async () => {
+      try {
+        setIsSyncing(true);
+        await CategoriesService.syncQuestionCounts();
+        await refetch(); // Refetch categories to get updated counts
+        toast.success('Question counts synced successfully');
+      } catch (error) {
+        console.error('Failed to sync question counts:', error);
+        toast.error('Failed to sync question counts');
+      } finally {
+        setIsSyncing(false);
+      }
+    };
+
+    if (!loading && categories.length > 0) {
+      syncQuestionCounts();
+    }
+  }, [loading, categories.length, refetch]);
+
+  const handleSyncQuestionCounts = async () => {
+    try {
+      setIsSyncing(true);
+      await CategoriesService.syncQuestionCounts();
+      await refetch(); // Refetch categories to get updated counts
+      toast.success('Question counts synced successfully');
+    } catch (error) {
+      console.error('Failed to sync question counts:', error);
+      toast.error('Failed to sync question counts');
+    } finally {
+      setIsSyncing(false);
+    }
+  };
 
   const isPreseeded = (category: Category) => {
     return DEFAULT_CATEGORIES.some((defaultCategory) => defaultCategory.name === category.name);
@@ -171,6 +209,16 @@ const CategoriesPage: React.FC = () => {
             </div>
 
             <div className="flex gap-3">
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={handleSyncQuestionCounts}
+                disabled={isSyncing}
+                className="bg-white/80 backdrop-blur-sm border-gray-200 hover:bg-white hover:border-gray-300 shadow-sm"
+              >
+                <RefreshCw className={`h-4 w-4 mr-2 ${isSyncing ? 'animate-spin' : ''}`} />
+                {isSyncing ? 'Syncing...' : 'Sync Question Counts'}
+              </Button>
               <Button
                 variant="outline"
                 size="lg"
