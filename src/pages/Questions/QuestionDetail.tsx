@@ -237,7 +237,7 @@ const QuestionDetail = () => {
           <div>
             <h1 className="text-2xl font-bold text-foreground">Question Details</h1>
             <p className="text-muted-foreground">
-              Year {question.year} • ID: {question._id.slice(-8)}
+              Year {question.year} • ID: {question.id.slice(-8)}
             </p>
           </div>
         </div>

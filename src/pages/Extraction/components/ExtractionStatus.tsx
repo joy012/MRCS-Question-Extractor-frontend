@@ -1,4 +1,4 @@
-import { AlertCircle, CheckCircle, Clock, RefreshCw, Square, XCircle, Activity, Target, Zap } from 'lucide-react';
+import { Activity, AlertCircle, CheckCircle, Clock, RefreshCw, Square, Target, XCircle, Zap } from 'lucide-react';
 import React from 'react';
 import { Alert, AlertDescription } from '../../../components/ui/alert';
 import { Badge } from '../../../components/ui/badge';
@@ -14,9 +14,9 @@ interface ExtractionStatusProps {
   onClearState: () => void;
 }
 
-export const ExtractionStatus: React.FC<ExtractionStatusProps> = ({ 
-  extractionState, 
-  onClearState 
+export const ExtractionStatus: React.FC<ExtractionStatusProps> = ({
+  extractionState,
+  onClearState
 }) => {
   const stopExtractionMutation = useStopExtractionMutation();
   const { success, error } = useToastHelpers();
@@ -34,15 +34,15 @@ export const ExtractionStatus: React.FC<ExtractionStatusProps> = ({
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'processing':
-        return <Activity className="h-5 w-5 text-blue-600" />;
+        return <Activity className="h-4 w-4 text-blue-600" />;
       case 'completed':
-        return <CheckCircle className="h-5 w-5 text-green-600" />;
+        return <CheckCircle className="h-4 w-4 text-green-600" />;
       case 'failed':
-        return <XCircle className="h-5 w-5 text-red-600" />;
+        return <XCircle className="h-4 w-4 text-red-600" />;
       case 'stopped':
-        return <Square className="h-5 w-5 text-yellow-600" />;
+        return <Square className="h-4 w-4 text-yellow-600" />;
       default:
-        return <Clock className="h-5 w-5 text-gray-600" />;
+        return <Clock className="h-4 w-4 text-gray-600" />;
     }
   };
 
@@ -77,79 +77,79 @@ export const ExtractionStatus: React.FC<ExtractionStatusProps> = ({
   };
 
   return (
-    <div className="space-y-6">
-      {/* Main Status Card */}
-      <Card className={`border-0 shadow-lg bg-gradient-to-br ${getStatusGradient(extractionState.status)}`}>
-        <CardHeader>
+    <div className="space-y-4">
+      {/* Compact Main Status Card */}
+      <Card className={`border-0 shadow-md bg-gradient-to-br ${getStatusGradient(extractionState.status)}`}>
+        <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-white/80 backdrop-blur-sm shadow-sm">
+            <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-white/80 backdrop-blur-sm shadow-sm">
                 {getStatusIcon(extractionState.status)}
               </div>
               <div>
-                <CardTitle className="text-xl font-semibold text-gray-900">
+                <CardTitle className="text-lg font-semibold text-gray-900">
                   Current Status
                 </CardTitle>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-xs text-gray-600">
                   Real-time extraction monitoring
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <Badge className={`${getStatusColor(extractionState.status)} font-semibold`}>
+            <div className="flex items-center gap-2">
+              <Badge className={`${getStatusColor(extractionState.status)} font-semibold text-xs`}>
                 {extractionState.status.toUpperCase()}
               </Badge>
               {extractionState.status === 'processing' && (
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                  <span className="text-sm text-blue-600 font-medium">Live</span>
+                <div className="flex items-center gap-1">
+                  <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
+                  <span className="text-xs text-blue-600 font-medium">Live</span>
                 </div>
               )}
             </div>
           </div>
         </CardHeader>
-        <CardContent className="space-y-6">
-          {/* File Info */}
+        <CardContent className="space-y-4 pt-0">
+          {/* Compact File Info */}
           {extractionState.selectedPdf && (
-            <div className="flex items-center gap-3 p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-white/50">
-              <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                <Target className="h-5 w-5 text-blue-600" />
+            <div className="flex items-center gap-2 p-3 bg-white/60 backdrop-blur-sm rounded-lg border border-white/50">
+              <div className="w-8 h-8 rounded-md bg-blue-500/10 flex items-center justify-center">
+                <Target className="h-4 w-4 text-blue-600" />
               </div>
               <div className="flex-1">
-                <p className="font-medium text-gray-900">Processing File</p>
-                <p className="text-sm text-gray-600">{extractionState.selectedPdf}</p>
+                <p className="font-medium text-sm text-gray-900">Processing File</p>
+                <p className="text-xs text-gray-600">{extractionState.selectedPdf}</p>
               </div>
             </div>
           )}
 
-          {/* Progress Section */}
+          {/* Compact Progress Section */}
           {extractionState.status === 'processing' && (
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Zap className="h-4 w-4 text-blue-600" />
-                  <span className="font-medium text-gray-900">Progress</span>
+                  <Zap className="h-3 w-3 text-blue-600" />
+                  <span className="font-medium text-sm text-gray-900">Progress</span>
                 </div>
-                <span className="text-2xl font-bold text-blue-600">{extractionState.progress}%</span>
+                <span className="text-xl font-bold text-blue-600">{extractionState.progress}%</span>
               </div>
-              
+
               <div className="relative">
-                <Progress 
-                  value={extractionState.progress} 
-                  className="h-3 bg-blue-100"
+                <Progress
+                  value={extractionState.progress}
+                  className="h-2 bg-blue-100"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full opacity-20"></div>
               </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center p-3 bg-white/60 backdrop-blur-sm rounded-lg border border-white/50">
-                  <div className="text-lg font-bold text-gray-900">
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="text-center p-2 bg-white/60 backdrop-blur-sm rounded-md border border-white/50">
+                  <div className="text-sm font-bold text-gray-900">
                     {extractionState.processedPages}
                   </div>
                   <div className="text-xs text-gray-600">Pages Processed</div>
                 </div>
-                <div className="text-center p-3 bg-white/60 backdrop-blur-sm rounded-lg border border-white/50">
-                  <div className="text-lg font-bold text-gray-900">
+                <div className="text-center p-2 bg-white/60 backdrop-blur-sm rounded-md border border-white/50">
+                  <div className="text-sm font-bold text-gray-900">
                     {extractionState.totalPages}
                   </div>
                   <div className="text-xs text-gray-600">Total Pages</div>
@@ -158,24 +158,24 @@ export const ExtractionStatus: React.FC<ExtractionStatusProps> = ({
             </div>
           )}
 
-          {/* Action Buttons */}
-          <div className="flex gap-3">
+          {/* Compact Action Buttons */}
+          <div className="flex gap-2">
             {extractionState.status === 'processing' && (
               <Button
                 variant="destructive"
-                size="lg"
+                size="sm"
                 onClick={handleStopExtraction}
                 disabled={stopExtractionMutation.isPending}
-                className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-lg"
+                className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-md"
               >
                 {stopExtractionMutation.isPending ? (
                   <>
-                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                    <RefreshCw className="h-3 w-3 mr-1 animate-spin" />
                     Stopping...
                   </>
                 ) : (
                   <>
-                    <Square className="h-4 w-4 mr-2" />
+                    <Square className="h-3 w-3 mr-1" />
                     Stop Extraction
                   </>
                 )}
@@ -184,7 +184,7 @@ export const ExtractionStatus: React.FC<ExtractionStatusProps> = ({
             {extractionState.status !== 'idle' && (
               <Button
                 variant="outline"
-                size="lg"
+                size="sm"
                 onClick={onClearState}
                 className="bg-white/80 backdrop-blur-sm border-gray-200 hover:bg-white hover:border-gray-300"
               >
@@ -193,11 +193,11 @@ export const ExtractionStatus: React.FC<ExtractionStatusProps> = ({
             )}
           </div>
 
-          {/* Error Display */}
+          {/* Compact Error Display */}
           {extractionState.error && (
             <Alert variant="destructive" className="border-red-200 bg-red-50">
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription className="text-red-800">{extractionState.error}</AlertDescription>
+              <AlertCircle className="h-3 w-3" />
+              <AlertDescription className="text-red-800 text-xs">{extractionState.error}</AlertDescription>
             </Alert>
           )}
         </CardContent>

@@ -32,7 +32,7 @@ const ExtractionMonitor: React.FC = () => {
   // Loading state
   if (!extractionState) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-4">
         <Card>
           <CardHeader>
             <CardTitle>Extraction Monitor</CardTitle>
@@ -46,7 +46,7 @@ const ExtractionMonitor: React.FC = () => {
   const isProcessing = extractionState.status === 'processing';
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Header with controls */}
       <ExtractionHeader
         isProcessing={isProcessing}

@@ -20,10 +20,8 @@ import {
 import { useGetExtractionStatusQuery } from '../services/queries/useExtraction';
 import { useGetIntakesQuery } from '../services/queries/useIntakes';
 import {
-  useGetQuestionStatisticsQuery,
-  useGetRecentQuestionsQuery
+  useGetQuestionStatisticsQuery
 } from '../services/queries/useQuestions';
-import type { Question } from '../types/question';
 
 // Loading skeleton for stat cards
 const StatCardSkeleton = () => (
@@ -41,24 +39,12 @@ const StatCardSkeleton = () => (
   </Card>
 );
 
-// Loading skeleton for activity items
-const ActivitySkeleton = () => (
-  <div className="flex items-center gap-3 p-4 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-200/50">
-    <Skeleton className="h-5 w-5 rounded-full" />
-    <div className="flex-1">
-      <Skeleton className="h-4 w-48 mb-1" />
-      <Skeleton className="h-3 w-32" />
-    </div>
-    <Skeleton className="h-6 w-16 rounded-full" />
-  </div>
-);
 
 const Dashboard = () => {
   // API hooks
   const { data: questionStats, isLoading: questionStatsLoading } = useGetQuestionStatisticsQuery();
   const { data: categories, isLoading: categoriesLoading } = useGetCategoriesQuery();
   const { data: intakes } = useGetIntakesQuery();
-  const { data: recentQuestions, isLoading: recentLoading } = useGetRecentQuestionsQuery(5);
   const { data: extractionStatus } = useGetExtractionStatusQuery();
 
   // Calculate derived data
@@ -356,66 +342,6 @@ const Dashboard = () => {
           </CardContent>
         </Card>
       </div>
-
-      {/* Recent Questions */}
-      <Card className="border-0 shadow-lg bg-gradient-to-br from-gray-50 to-gray-100/50">
-        <CardHeader>
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
-              <Clock className="h-4 w-4 text-indigo-600" />
-            </div>
-            <div>
-              <CardTitle className="text-lg font-semibold text-gray-900">Recent Questions</CardTitle>
-              <CardDescription className="text-gray-600">
-                Latest questions added to the database
-              </CardDescription>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          {recentLoading ? (
-            <div className="space-y-3">
-              {[...Array(3)].map((_, i) => (
-                <ActivitySkeleton key={i} />
-              ))}
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {recentQuestions?.data && recentQuestions.data.length > 0 ? (
-                recentQuestions.data.map((question: Question) => (
-                  <div key={question._id} className="flex items-center gap-3 p-4 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-200/50 transition-all duration-200 hover:shadow-sm">
-                    <div className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
-                      <BookOpen className="h-4 w-4 text-indigo-600" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium text-gray-900 truncate">
-                        {question.question.substring(0, 100)}...
-                      </p>
-                      <p className="text-sm text-gray-500 mt-1">
-                        {question.categories?.map((cat: any) => cat.name).join(', ')} • {question.year}
-                      </p>
-                    </div>
-                    <Badge
-                      variant={question.status === 'APPROVED' ? 'default' : 'secondary'}
-                      className={question.status === 'APPROVED' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}
-                    >
-                      {question.status}
-                    </Badge>
-                  </div>
-                ))
-              ) : (
-                <div className="text-center py-12 text-gray-500">
-                  <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
-                    <BookOpen className="h-8 w-8 text-gray-400" />
-                  </div>
-                  <p className="font-medium text-gray-900 mb-1">No questions found</p>
-                  <p className="text-sm">Start extracting questions to see them here</p>
-                </div>
-              )}
-            </div>
-          )}
-        </CardContent>
-      </Card>
     </div>
   );
 };

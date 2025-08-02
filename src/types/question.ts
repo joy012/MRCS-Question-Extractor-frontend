@@ -30,7 +30,7 @@ export interface AiMetadata {
 }
 
 export interface Intake {
-  _id: string;
+  id: string;
   name: string;
   type: string;
   displayName: string;
@@ -45,7 +45,7 @@ export interface Intake {
 }
 
 export interface Category {
-  _id: string;
+  id: string;
   name: string;
   displayName: string;
   type: string;
@@ -60,7 +60,7 @@ export interface Category {
 }
 
 export interface Question {
-  _id: string;
+  id: string;
   question: string;
   options: QuestionOptions;
   correctAnswer: CorrectAnswer;

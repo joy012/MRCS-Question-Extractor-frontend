@@ -66,7 +66,7 @@ const IntakesPage: React.FC = () => {
         isActive: formData.isActive,
       };
 
-      await updateIntakeMutation.mutateAsync({ id: selectedIntake._id, data: updateData });
+      await updateIntakeMutation.mutateAsync({ id: selectedIntake.id, data: updateData });
       toast.success('Intake updated successfully');
       setIsEditDialogOpen(false);
       setSelectedIntake(null);
@@ -79,7 +79,7 @@ const IntakesPage: React.FC = () => {
     if (!selectedIntake) return;
 
     try {
-      await deleteIntakeMutation.mutateAsync(selectedIntake._id);
+      await deleteIntakeMutation.mutateAsync(selectedIntake.id);
       toast.success('Intake deleted successfully');
       setIsDeleteDialogOpen(false);
       setSelectedIntake(null);
@@ -233,7 +233,7 @@ const IntakesPage: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {intakes.map((intake) => (
           <IntakeCard
-            key={intake._id}
+            key={intake.id}
             intake={intake}
             onEdit={openEditDialog}
             onDelete={openDeleteDialog}

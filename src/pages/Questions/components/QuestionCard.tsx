@@ -1,4 +1,4 @@
-import { CheckCircle, Edit, Eye, MoreVertical, ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react';
+import { BookOpen, CheckCircle, Edit, Eye, MoreVertical, ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '../../../components/ui/badge';
 import { Button } from '../../../components/ui/button';
@@ -15,14 +15,26 @@ import type { QuestionCardProps } from '../types';
 
 // Utility functions
 const getVerificationStatus = (isVerified?: boolean) => {
-  if (isVerified) return { label: 'Verified', color: 'bg-green-100 text-green-800 border-green-200' };
-  return { label: 'Pending', color: 'bg-yellow-100 text-yellow-800 border-yellow-200' };
+  if (isVerified) return { label: 'Verified', color: 'bg-emerald-100 text-emerald-700 border-emerald-200' };
+  return { label: 'Pending', color: 'bg-amber-100 text-amber-700 border-amber-200' };
 };
 
 const getConfidenceColor = (confidence: number) => {
-  if (confidence >= 0.8) return 'text-green-600';
-  if (confidence >= 0.6) return 'text-yellow-600';
-  return 'text-red-600';
+  if (confidence >= 0.8) return 'text-emerald-600 bg-emerald-50';
+  if (confidence >= 0.6) return 'text-amber-600 bg-amber-50';
+  return 'text-red-600 bg-red-50';
+};
+
+const getCategoryDisplayName = (category: any) => {
+  const type = category.type || 'BASIC';
+  const displayName = category.displayName || category.name;
+  return `${type.charAt(0) + type.slice(1).toLowerCase()}-${displayName}`;
+};
+
+const getIntakeDisplayName = (intake: any) => {
+  const type = intake.type || 'JANUARY';
+  const year = intake.year || new Date().getFullYear();
+  return `${type} ${year}`;
 };
 
 // Question metadata component
@@ -32,36 +44,52 @@ const QuestionMetadata = ({ question, serialNumber }: { question: QuestionCardPr
   const status = getVerificationStatus(isVerified);
 
   return (
-    <div className="flex items-center gap-4">
-      <span className="font-bold text-lg text-gray-900">#{serialNumber}</span>
+    <div className="flex items-center justify-between">
       <div className="flex items-center gap-2">
+        <span className="font-bold text-base text-gray-900">#{serialNumber}</span>
+        <Badge className={`${status.color} text-xs font-medium`}>
+          {status.label}
+        </Badge>
+        <span className={`${getConfidenceColor(confidence)} text-xs font-medium px-2 py-0.5 rounded-full`}>
+          {Math.round(confidence * 100)}% AI
+        </span>
+      </div>
+      <div className="flex items-center gap-1">
         {question.pageNumber && (
-          <Badge variant="outline" className="text-xs">
-            Page {question.pageNumber}
+          <Badge variant="outline" className="text-xs bg-gray-50">
+            P{question.pageNumber}
           </Badge>
         )}
         {question.examYear && (
-          <Badge variant="outline" className="text-xs">
+          <Badge variant="outline" className="text-xs bg-gray-50">
             {question.examYear}
           </Badge>
         )}
-        <Badge className={`${status.color} text-xs`}>
-          {status.label}
-        </Badge>
-        <span className={`${getConfidenceColor(confidence)} text-xs font-medium bg-gray-50 px-2 py-1 rounded`}>
-          {Math.round(confidence * 100)}% AI Confidence
-        </span>
       </div>
     </div>
   );
 };
 
+// Intake information component
+const IntakeInfo = ({ intake }: { intake: QuestionCardProps['question']['intake'] }) => (
+  <div className="flex items-center gap-2 mb-2">
+    <div className="flex items-center gap-1.5 text-xs text-gray-600">
+      <BookOpen className="w-3 h-3" />
+      <span className="font-medium">{getIntakeDisplayName(intake)}</span>
+    </div>
+  </div>
+);
+
 // Categories component
 const QuestionCategories = ({ categories }: { categories: QuestionCardProps['question']['categories'] }) => (
-  <div className="flex flex-wrap gap-1 mb-3">
+  <div className="flex flex-wrap gap-1 mb-2">
     {categories.map((category) => (
-      <Badge key={category._id} variant="outline" className="text-xs px-2 py-1 bg-gray-50">
-        {category.displayName.replace(/_/g, ' ')}
+      <Badge
+        key={category.id}
+        variant="outline"
+        className="text-xs px-1.5 py-0.5 bg-blue-50 border-blue-200 text-blue-700 font-medium"
+      >
+        {getCategoryDisplayName(category)}
       </Badge>
     ))}
   </div>
@@ -69,32 +97,31 @@ const QuestionCategories = ({ categories }: { categories: QuestionCardProps['que
 
 // Answer options component
 const AnswerOptions = ({ question }: { question: QuestionCardProps['question'] }) => {
-  // Filter out _id from options and only show A, B, C, D
   const validOptions = Object.entries(question.options).filter(([key]) =>
     ['A', 'B', 'C', 'D'].includes(key)
   );
 
   return (
-    <div className="grid grid-cols-2 gap-3">
+    <div className="grid grid-cols-2 gap-1.5">
       {validOptions.map(([key, value]) => (
         <div
           key={key}
-          className={`flex items-start gap-2 p-2 rounded-lg border transition-colors ${question.correctAnswer === key
-              ? 'border-green-500 bg-green-50'
-              : 'border-gray-200 bg-white hover:border-gray-300'
+          className={`flex items-start gap-1.5 p-2 rounded border transition-colors ${question.correctAnswer === key
+            ? 'border-emerald-500 bg-emerald-50'
+            : 'border-gray-200 bg-white hover:border-gray-300'
             }`}
         >
           <div
-            className={`flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold flex-shrink-0 ${question.correctAnswer === key
-                ? 'bg-green-500 text-white'
-                : 'bg-gray-200 text-gray-700'
+            className={`flex items-center justify-center w-4 h-4 rounded-full text-xs font-bold flex-shrink-0 ${question.correctAnswer === key
+              ? 'bg-emerald-500 text-white'
+              : 'bg-gray-200 text-gray-700'
               }`}
           >
             {key}
           </div>
           <span className="text-xs text-gray-700 leading-relaxed flex-1 min-w-0">{value}</span>
           {question.correctAnswer === key && (
-            <Badge variant="default" className="bg-green-500 text-white text-xs px-1 py-0 ml-1 flex-shrink-0">
+            <Badge variant="default" className="bg-emerald-500 text-white text-xs px-1 py-0 ml-1 flex-shrink-0">
               Correct
             </Badge>
           )}
@@ -113,30 +140,30 @@ const QuestionActions = ({
   const isVerified = question.extractionMetadata?.manuallyVerified || false;
 
   return (
-    <div className="flex flex-col gap-2 min-w-fit">
+    <div className="flex flex-col gap-1 min-w-fit">
       {!isVerified ? (
         <>
           <Button
             size="sm"
             variant="outline"
-            className="text-green-600 border-green-200 hover:bg-green-50 hover:border-green-300 whitespace-nowrap"
-            onClick={() => onApprove(question._id)}
+            className="text-emerald-600 border-emerald-200 hover:bg-emerald-50 hover:border-emerald-300 whitespace-nowrap h-7 px-2 text-xs"
+            onClick={() => onApprove(question.id)}
           >
-            <ThumbsUp className="w-4 h-4 mr-1" />
+            <ThumbsUp className="w-3 h-3 mr-1" />
             Approve
           </Button>
           <Button
             size="sm"
             variant="outline"
-            className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300 whitespace-nowrap"
-            onClick={() => onReject(question._id)}
+            className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300 whitespace-nowrap h-7 px-2 text-xs"
+            onClick={() => onReject(question.id)}
           >
-            <ThumbsDown className="w-4 h-4 mr-1" />
+            <ThumbsDown className="w-3 h-3 mr-1" />
             Reject
           </Button>
         </>
       ) : (
-        <Badge className="bg-green-100 text-green-800 border-green-200 whitespace-nowrap">
+        <Badge className="bg-emerald-100 text-emerald-800 border-emerald-200 whitespace-nowrap text-xs">
           <CheckCircle className="w-3 h-3 mr-1" />
           Verified
         </Badge>
@@ -149,14 +176,14 @@ const QuestionActions = ({
 const QuestionDropdown = ({ question, onEdit, onDelete }: Pick<QuestionCardProps, 'question' | 'onEdit' | 'onDelete'>) => (
   <DropdownMenu>
     <DropdownMenuTrigger asChild>
-      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-        <MoreVertical className="h-4 w-4" />
+      <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+        <MoreVertical className="h-3.5 w-3.5" />
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end">
       <DropdownMenuLabel>Actions</DropdownMenuLabel>
       <DropdownMenuItem asChild>
-        <Link to={`/questions/${question._id}`}>
+        <Link to={`/questions/${question.id}`}>
           <Eye className="mr-2 h-4 w-4" />
           View Details
         </Link>
@@ -167,7 +194,7 @@ const QuestionDropdown = ({ question, onEdit, onDelete }: Pick<QuestionCardProps
       </DropdownMenuItem>
       <DropdownMenuSeparator />
       <DropdownMenuItem
-        onClick={() => onDelete(question._id)}
+        onClick={() => onDelete(question.id)}
         className="text-destructive"
       >
         <Trash2 className="mr-2 h-4 w-4" />
@@ -180,23 +207,26 @@ const QuestionDropdown = ({ question, onEdit, onDelete }: Pick<QuestionCardProps
 // Main QuestionCard component
 export const QuestionCard = ({ question, onEdit, onDelete, onApprove, onReject, serialNumber }: QuestionCardProps) => {
   return (
-    <Card className="bg-white border border-gray-200 hover:shadow-lg transition-all duration-200">
-      <CardContent className="p-6">
-        <div className="flex items-start gap-6">
+    <Card className="bg-white border border-gray-200 hover:shadow-md transition-all duration-200 group">
+      <CardContent className="p-3">
+        <div className="flex items-start gap-3">
           {/* Left Section - Question Info */}
           <div className="flex-1 min-w-0">
             {/* Header Row */}
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between mb-2">
               <QuestionMetadata question={question} serialNumber={serialNumber} />
               <QuestionDropdown question={question} onEdit={onEdit} onDelete={onDelete} />
             </div>
+
+            {/* Intake Information */}
+            <IntakeInfo intake={question.intake} />
 
             {/* Categories */}
             <QuestionCategories categories={question.categories} />
 
             {/* Question Text */}
-            <div className="mb-4">
-              <p className="text-sm text-gray-700 leading-relaxed bg-gray-50 p-3 rounded-lg">
+            <div className="mb-2">
+              <p className="text-sm text-gray-700 leading-relaxed bg-gray-50 p-2.5 rounded border border-gray-100">
                 {question.question}
               </p>
             </div>

@@ -163,7 +163,7 @@ export const QuestionsList = ({
       <div className="space-y-4">
         {questions.map((question, index) => (
           <QuestionCard
-            key={question._id}
+            key={question.id}
             question={question}
             onEdit={actions.onEdit}
             onDelete={actions.onDelete}

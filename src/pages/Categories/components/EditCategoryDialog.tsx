@@ -5,7 +5,7 @@ import {
 import React from 'react';
 import { Button } from '../../../components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '../../../components/ui/dialog';
-import type { Category } from '../../../types/question';
+import type { Category } from '../../../services/api/categories';
 import { CategoryForm } from './CategoryForm/CategoryForm';
 import type { CategoryFormData } from './CategoryForm/types';
 

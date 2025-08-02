@@ -18,6 +18,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/ca
 import { Skeleton } from '../../components/ui/skeleton';
 import { DEFAULT_CATEGORIES } from '../../constants/categories';
 import { getCardColorClasses } from '../../lib/utils';
+import type { Category } from '../../services/api/categories';
 import {
   useCreateCategoryMutation,
   useDeleteCategoryMutation,
@@ -25,7 +26,6 @@ import {
   useResetCategoriesMutation,
   useUpdateCategoryMutation
 } from '../../services/queries/useCategories';
-import type { Category } from '../../types/question';
 import {
   CreateCategoryDialog,
   DeleteCategoryDialog,

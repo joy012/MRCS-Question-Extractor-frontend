@@ -3,7 +3,7 @@ import React from 'react';
 import { Alert, AlertDescription } from '../../../components/ui/alert';
 import { Button } from '../../../components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '../../../components/ui/dialog';
-import type { Category } from '../../../types/question';
+import type { Category } from '../../../services/api/categories';
 
 interface DeleteCategoryDialogProps {
   open: boolean;
