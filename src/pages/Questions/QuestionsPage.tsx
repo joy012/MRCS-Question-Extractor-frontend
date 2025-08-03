@@ -1,8 +1,10 @@
+import { Badge } from '@/components/ui/badge';
 import {
   BookOpen,
   Download,
   Filter,
-  Plus
+  Plus,
+  RotateCcw
 } from 'lucide-react';
 import { useCallback } from 'react';
 import { Link } from 'react-router-dom';
@@ -12,21 +14,18 @@ import {
   useDeleteQuestionMutation,
   useGetQuestionCategoriesQuery,
   useGetQuestionsQuery,
-  useGetQuestionStatisticsQuery,
   useUpdateQuestionStatusMutation
 } from '../../services/queries/useQuestions';
-import { QuestionStatus } from '../../types';
+import { QuestionStatus, type Question } from '../../types';
 import { QuestionsFilters } from './components/QuestionsFilters';
 import { QuestionsList } from './components/QuestionsList';
-import { QuestionsStats } from './components/QuestionsStats';
 import { useQuestionsFilters } from './hooks/useQuestionsFilters';
-import type { ExtendedQuestion } from './types';
 
 const QuestionsPage = () => {
   // Custom hooks
   const { filterState, handlers } = useQuestionsFilters();
   const { searchTerm, statusFilter, categoryFilter, intakeFilter, yearFilter, confidenceFilter, sortBy, sortOrder, currentPage, itemsPerPage } = filterState;
-  const { handleSearch, handleStatusFilter, handleCategoryFilter, handleIntakeFilter, handleYearFilter, handleConfidenceFilter, handleSort, handleSortOrder, handlePageChange } = handlers;
+  const { handleSearch, handleStatusFilter, handleCategoryFilter, handleIntakeFilter, handleYearFilter, handleConfidenceFilter, handleSort, handleSortOrder, handlePageChange, handleResetFilters } = handlers;
 
   // API hooks
   const questionsQuery = useGetQuestionsQuery({
@@ -37,19 +36,18 @@ const QuestionsPage = () => {
     categories: categoryFilter !== 'all' ? [categoryFilter] : undefined,
     intake: intakeFilter !== 'all' ? intakeFilter : undefined,
     year: yearFilter !== 'all' ? parseInt(yearFilter) : undefined,
-    minConfidence: confidenceFilter !== 'all' ? parseInt(confidenceFilter) : undefined,
+    minConfidence: confidenceFilter !== 'all' ? parseFloat(confidenceFilter) : undefined,
     sortBy,
     sortOrder
   });
 
   const { data: categories } = useGetQuestionCategoriesQuery();
-  const { data: questionStats } = useGetQuestionStatisticsQuery();
   const deleteMutation = useDeleteQuestionMutation();
   const approveMutation = useUpdateQuestionStatusMutation();
   const rejectMutation = useUpdateQuestionStatusMutation();
 
   // Handlers
-  const handleEdit = useCallback((question: ExtendedQuestion) => {
+  const handleEdit = useCallback((question: Question) => {
     // TODO: Implement edit modal
     console.log('Edit question:', question);
   }, []);
@@ -72,11 +70,9 @@ const QuestionsPage = () => {
   }, []);
 
   // Data
-  const totalQuestions = questionsQuery.data?.meta?.total || 0;
-  const totalPages = questionsQuery.data?.meta?.totalPages || 1;
+  const totalQuestions = questionsQuery.data?.pagination?.total || 0;
+  const totalPages = questionsQuery.data?.pagination?.totalPages || 1;
   const questions = questionsQuery.data?.data || [];
-  const verifiedCount = questionStats?.byStatus?.APPROVED || 0;
-  const pendingCount = questionStats?.byStatus?.PENDING || 0;
 
   const actions = {
     onEdit: handleEdit,
@@ -84,6 +80,16 @@ const QuestionsPage = () => {
     onApprove: handleApprove,
     onReject: handleReject
   };
+
+  // Count active filters
+  const activeFiltersCount = [
+    searchTerm,
+    statusFilter !== 'all',
+    categoryFilter !== 'all',
+    intakeFilter !== 'all',
+    yearFilter !== 'all',
+    confidenceFilter !== 'all'
+  ].filter(Boolean).length;
 
   return (
     <div className="space-y-8 w-full">
@@ -131,22 +137,34 @@ const QuestionsPage = () => {
         </div>
       </div>
 
-      {/* Stats Cards */}
-      <QuestionsStats
-        totalQuestions={totalQuestions}
-        verifiedCount={verifiedCount}
-        pendingCount={pendingCount}
-        isLoading={questionsQuery.isLoading}
-      />
-
       {/* Filters */}
       <Card className="border-0 shadow-lg bg-gradient-to-br from-gray-50 to-gray-100/50">
         <CardContent className='p-6'>
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
-              <Filter className="h-4 w-4 text-indigo-600" />
+          <div className="flex items-center justify-between gap-3 mb-4">
+            <div className='flex items-center gap-2'>
+              <div className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
+                <Filter className="h-4 w-4 text-indigo-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900">Advanced Filters</h3>
             </div>
-            <h3 className="text-lg font-semibold text-gray-900">Advanced Filters</h3>
+            <div className="flex items-center justify-end gap-2">
+              {activeFiltersCount > 0 && (
+                <Badge variant="default" className="bg-indigo-100 text-indigo-700 hover:bg-indigo-200 text-xs">
+                  {activeFiltersCount}
+                </Badge>
+              )}
+              {activeFiltersCount > 0 && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleResetFilters}
+                  className="h-8 px-3 text-xs border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                >
+                  <RotateCcw className="w-3 h-3 mr-1.5" />
+                  Reset
+                </Button>
+              )}
+            </div>
           </div>
           <QuestionsFilters
             searchTerm={searchTerm}
@@ -166,22 +184,26 @@ const QuestionsPage = () => {
             sortOrder={sortOrder}
             onSortOrderChange={handleSortOrder}
             categories={categories || []}
+            // Pagination props
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={totalQuestions}
+            itemsPerPage={itemsPerPage}
+            onPageChange={handlePageChange}
           />
         </CardContent>
       </Card>
 
       {/* Questions List */}
       <QuestionsList
-        questions={questions as ExtendedQuestion[]}
+        questions={questions as Question[]}
         isLoading={questionsQuery.isLoading}
         error={questionsQuery.error as Error | null}
         currentPage={currentPage}
-        totalPages={totalPages}
         totalItems={totalQuestions}
         itemsPerPage={itemsPerPage}
         searchTerm={searchTerm}
         statusFilter={statusFilter}
-        onPageChange={handlePageChange}
         onRetry={() => questionsQuery.refetch()}
         actions={actions}
       />

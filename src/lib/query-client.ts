@@ -1,4 +1,6 @@
+import type { QuestionSearchParams } from '@/types';
 import { QueryClient } from '@tanstack/react-query';
+import { GET_QUESTIONS } from './query-keys';
 
 // Create a client
 export const queryClient = new QueryClient({
@@ -16,7 +18,7 @@ export const queryClient = new QueryClient({
 export const queryKeys = {
   // Questions
   questions: {
-    all: ['questions'] as const,
+    all: [GET_QUESTIONS] as const,
     lists: () => [...queryKeys.questions.all, 'list'] as const,
     details: () => [...queryKeys.questions.all, 'detail'] as const,
     statistics: () => [...queryKeys.questions.all, 'statistics'] as const,
@@ -26,7 +28,20 @@ export const queryKeys = {
     search: () => [...queryKeys.questions.all, 'search'] as const,
     byId: (id: string) => [...queryKeys.questions.details(), id] as const,
     byPage: (page: number) => [...queryKeys.questions.lists(), page] as const,
-    list: (params: any) => [...queryKeys.questions.lists(), params] as const,
+    list: (params: QuestionSearchParams) =>
+      [
+        ...queryKeys.questions.lists(),
+        params.categories,
+        params.intake,
+        params.limit,
+        params.minConfidence,
+        params.page,
+        params.search,
+        params.sortBy,
+        params.sortOrder,
+        params.status,
+        params.year,
+      ] as const,
   },
 
   // Categories

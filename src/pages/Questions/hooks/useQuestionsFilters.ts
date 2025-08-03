@@ -138,6 +138,21 @@ export const useQuestionsFilters = () => {
     [updateUrlParams]
   );
 
+  const handleResetFilters = useCallback(() => {
+    setSearchTerm('');
+    setStatusFilter('all');
+    setCategoryFilter('all');
+    setIntakeFilter('all');
+    setYearFilter('all');
+    setConfidenceFilter('all');
+    setSortBy('createdAt');
+    setSortOrder('desc');
+    setCurrentPage(1);
+
+    // Clear all URL parameters
+    setSearchParams(new URLSearchParams());
+  }, [setSearchParams]);
+
   const filterState: FilterState = {
     searchTerm,
     statusFilter,
@@ -163,6 +178,7 @@ export const useQuestionsFilters = () => {
       handleSort,
       handleSortOrder,
       handlePageChange,
+      handleResetFilters,
     },
   };
 };

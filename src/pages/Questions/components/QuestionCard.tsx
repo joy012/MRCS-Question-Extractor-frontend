@@ -39,8 +39,8 @@ const getIntakeDisplayName = (intake: any) => {
 
 // Question metadata component
 const QuestionMetadata = ({ question, serialNumber }: { question: QuestionCardProps['question']; serialNumber: number }) => {
-  const confidence = question.extractionMetadata?.confidence || 0;
-  const isVerified = question.extractionMetadata?.manuallyVerified || false;
+  const confidence = question.aiMetadata?.confidence || 0;
+  const isVerified = question.status === 'APPROVED' || false;
   const status = getVerificationStatus(isVerified);
 
   return (
@@ -53,18 +53,6 @@ const QuestionMetadata = ({ question, serialNumber }: { question: QuestionCardPr
         <span className={`${getConfidenceColor(confidence)} text-xs font-medium px-2 py-0.5 rounded-full`}>
           {Math.round(confidence * 100)}% AI
         </span>
-      </div>
-      <div className="flex items-center gap-1">
-        {question.pageNumber && (
-          <Badge variant="outline" className="text-xs bg-gray-50">
-            P{question.pageNumber}
-          </Badge>
-        )}
-        {question.examYear && (
-          <Badge variant="outline" className="text-xs bg-gray-50">
-            {question.examYear}
-          </Badge>
-        )}
       </div>
     </div>
   );
@@ -137,7 +125,7 @@ const QuestionActions = ({
   onApprove,
   onReject
 }: QuestionCardProps) => {
-  const isVerified = question.extractionMetadata?.manuallyVerified || false;
+  const isVerified = question.status === 'APPROVED' || false;
 
   return (
     <div className="flex flex-col gap-1 min-w-fit">

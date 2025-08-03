@@ -9,7 +9,6 @@ import { Button } from '../../../components/ui/button';
 import { Card, CardContent } from '../../../components/ui/card';
 import { Skeleton } from '../../../components/ui/skeleton';
 import type { ExtendedQuestion, QuestionActions } from '../types';
-import { Pagination } from './Pagination';
 import { QuestionCard } from './QuestionCard';
 
 // Skeleton loader for questions grid
@@ -95,12 +94,10 @@ interface QuestionsListProps {
   isLoading: boolean;
   error: Error | null;
   currentPage: number;
-  totalPages: number;
   totalItems: number;
   itemsPerPage: number;
   searchTerm: string;
   statusFilter: string;
-  onPageChange: (page: number) => void;
   onRetry: () => void;
   actions: QuestionActions;
 }
@@ -110,12 +107,10 @@ export const QuestionsList = ({
   isLoading,
   error,
   currentPage,
-  totalPages,
   totalItems,
   itemsPerPage,
   searchTerm,
   statusFilter,
-  onPageChange,
   onRetry,
   actions
 }: QuestionsListProps) => {
@@ -147,17 +142,6 @@ export const QuestionsList = ({
           </div>
         </div>
       </div>
-
-      {/* Pagination - Always visible at top */}
-      {totalPages > 1 && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          totalItems={totalItems}
-          itemsPerPage={itemsPerPage}
-          onPageChange={onPageChange}
-        />
-      )}
 
       {/* Questions List */}
       <div className="space-y-4">

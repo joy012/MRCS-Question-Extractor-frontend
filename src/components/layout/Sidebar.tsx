@@ -9,6 +9,7 @@ import {
   Settings,
   Shield,
   Tag,
+  XCircle,
   Zap
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
@@ -74,6 +75,7 @@ export const Sidebar = () => {
   const totalQuestions = questionStats?.total || 0;
   const approvedQuestions = questionStats?.byStatus?.APPROVED || 0;
   const pendingQuestions = questionStats?.byStatus?.PENDING || 0;
+  const rejectedQuestions = questionStats?.byStatus?.REJECTED || 0;
 
   // Get extraction status for badge
   const getExtractionBadge = () => {
@@ -94,7 +96,7 @@ export const Sidebar = () => {
   const extractionBadge = getExtractionBadge();
 
   return (
-    <div className="w-64 bg-gradient-to-b from-white to-gray-50/50 border-r border-gray-200/50 flex flex-col h-full shadow-lg">
+    <div className="w-68 bg-gradient-to-b from-white to-gray-50/50 border-r border-gray-200/50 flex flex-col h-full shadow-lg">
       {/* Logo/Brand */}
       <div className="px-6 py-5.5 border-b border-gray-200/50 bg-white/80 backdrop-blur-sm">
         <div className="flex items-center gap-3">
@@ -141,6 +143,16 @@ export const Sidebar = () => {
               <span className="text-xs font-medium text-gray-600">Pending</span>
             </div>
             <span className="text-sm font-bold text-yellow-600">{pendingQuestions.toLocaleString()}</span>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-lg bg-red-500/10 flex items-center justify-center">
+                <XCircle className="h-3 w-3 text-red-600" />
+              </div>
+              <span className="text-xs font-medium text-gray-600">Rejected</span>
+            </div>
+            <span className="text-sm font-bold text-red-600">{rejectedQuestions.toLocaleString()}</span>
           </div>
         </div>
       </div>

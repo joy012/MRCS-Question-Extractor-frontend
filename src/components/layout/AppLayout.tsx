@@ -8,7 +8,7 @@ export const AppLayout = () => {
       {/* Main container - full screen flex layout */}
       <div className="flex h-full w-full">
         {/* Sidebar - fixed width with proper height */}
-        <div className="w-64 shrink-0 h-full">
+        <div className="w-68 shrink-0 h-full">
           <Sidebar />
         </div>
 

@@ -82,7 +82,7 @@ export const ExtractionLogs: React.FC<ExtractionLogsProps> = ({
         <CardContent className="pt-0">
           <ScrollArea className="h-60">
             <div className="space-y-2 pr-4">
-              {logs.map((log, index) => (
+              {logs.slice().reverse().map((log, index) => (
                 <div
                   key={index}
                   className={`flex items-start gap-2 p-2 rounded-lg border ${getLogColor(log)} backdrop-blur-sm transition-all duration-200 hover:shadow-sm`}
@@ -97,7 +97,7 @@ export const ExtractionLogs: React.FC<ExtractionLogsProps> = ({
                     <div className="flex items-center gap-1 mt-1">
                       <div className="w-0.5 h-0.5 bg-gray-400 rounded-full"></div>
                       <span className="text-xs text-gray-500">
-                        #{index + 1}
+                        #{logs.length - index}
                       </span>
                     </div>
                   </div>
@@ -107,55 +107,6 @@ export const ExtractionLogs: React.FC<ExtractionLogsProps> = ({
           </ScrollArea>
         </CardContent>
       </Card>
-
-      {/* Compact Log Stats */}
-      <div className="grid grid-cols-3 gap-3">
-        <Card className="border-0 shadow-sm bg-gradient-to-br from-blue-50 to-blue-100/50">
-          <CardContent className="p-3">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-md bg-blue-500/10 flex items-center justify-center">
-                <Activity className="h-3 w-3 text-blue-600" />
-              </div>
-              <div>
-                <div className="text-sm font-bold text-gray-900">{logs.length}</div>
-                <div className="text-xs text-gray-600">Total</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-0 shadow-sm bg-gradient-to-br from-green-50 to-green-100/50">
-          <CardContent className="p-3">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-md bg-green-500/10 flex items-center justify-center">
-                <CheckCircle className="h-3 w-3 text-green-600" />
-              </div>
-              <div>
-                <div className="text-sm font-bold text-gray-900">
-                  {logs.filter(log => log.includes('Success') || log.includes('Completed')).length}
-                </div>
-                <div className="text-xs text-gray-600">Success</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-0 shadow-sm bg-gradient-to-br from-red-50 to-red-100/50">
-          <CardContent className="p-3">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-md bg-red-500/10 flex items-center justify-center">
-                <AlertCircle className="h-3 w-3 text-red-600" />
-              </div>
-              <div>
-                <div className="text-sm font-bold text-gray-900">
-                  {logs.filter(log => log.includes('Error') || log.includes('Failed')).length}
-                </div>
-                <div className="text-xs text-gray-600">Errors</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
     </div>
   );
 }; 

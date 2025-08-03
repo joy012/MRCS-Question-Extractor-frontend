@@ -48,19 +48,20 @@ export const Pagination = ({
   };
 
   return (
-    <div className="flex items-center justify-between bg-white border border-gray-200 rounded-lg p-4">
-      <div className="text-sm text-gray-700">
+    <div className="flex items-center justify-between">
+      <div className="text-sm text-gray-600">
         Showing {startItem} to {endItem} of {totalItems} questions
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1">
         <Button
           variant="outline"
           size="sm"
           disabled={currentPage === 1}
           onClick={() => onPageChange(1)}
+          className="h-8 w-8 p-0"
         >
-          <ChevronsLeft className="w-4 h-4" />
+          <ChevronsLeft className="w-3.5 h-3.5" />
         </Button>
 
         <Button
@@ -68,21 +69,22 @@ export const Pagination = ({
           size="sm"
           disabled={currentPage === 1}
           onClick={() => onPageChange(currentPage - 1)}
+          className="h-8 w-8 p-0"
         >
-          <ChevronLeft className="w-4 h-4" />
+          <ChevronLeft className="w-3.5 h-3.5" />
         </Button>
 
         <div className="flex items-center gap-1">
           {getPageNumbers().map((page, index) => (
             <div key={index}>
               {page === '...' ? (
-                <span className="px-3 py-2 text-gray-500">...</span>
+                <span className="px-2 py-1 text-gray-500 text-sm">...</span>
               ) : (
                 <Button
                   variant={currentPage === page ? "default" : "outline"}
                   size="sm"
                   onClick={() => onPageChange(page as number)}
-                  className="w-10 h-10"
+                  className="h-8 w-8 p-0 text-sm"
                 >
                   {page}
                 </Button>
@@ -96,8 +98,9 @@ export const Pagination = ({
           size="sm"
           disabled={currentPage === totalPages}
           onClick={() => onPageChange(currentPage + 1)}
+          className="h-8 w-8 p-0"
         >
-          <ChevronRight className="w-4 h-4" />
+          <ChevronRight className="w-3.5 h-3.5" />
         </Button>
 
         <Button
@@ -105,8 +108,9 @@ export const Pagination = ({
           size="sm"
           disabled={currentPage === totalPages}
           onClick={() => onPageChange(totalPages)}
+          className="h-8 w-8 p-0"
         >
-          <ChevronsRight className="w-4 h-4" />
+          <ChevronsRight className="w-3.5 h-3.5" />
         </Button>
       </div>
     </div>

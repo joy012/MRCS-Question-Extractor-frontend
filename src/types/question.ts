@@ -122,6 +122,7 @@ export interface QuestionStatistics {
 }
 
 export interface CategoryInfo {
+  id: string;
   category: string;
   count: number;
   percentage: number;
@@ -134,6 +135,7 @@ export interface YearInfo {
 }
 
 export interface IntakeInfo {
+  id: string;
   intake: string;
   count: number;
   percentage: number;

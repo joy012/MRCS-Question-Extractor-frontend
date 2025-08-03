@@ -17,6 +17,7 @@ import { QuestionsService } from '../api';
 
 // Get questions with pagination and filtering
 export const useGetQuestionsQuery = (params: QuestionSearchParams = {}) => {
+  console.log({ params });
   return useQuery({
     queryKey: queryKeys.questions.list(params),
     queryFn: () => QuestionsService.getQuestions(params),

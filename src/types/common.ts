@@ -6,14 +6,15 @@ export interface PaginationParams {
 
 export interface PaginatedResponse<T> {
   data: T[];
-  meta: {
-    total: number;
+  pagination: {
     page: number;
     limit: number;
+    total: number;
     totalPages: number;
-    hasNext: boolean;
-    hasPrev: boolean;
+    hasNextPage: boolean;
+    hasPrevPage: boolean;
   };
+  success: boolean;
 }
 
 export interface ApiError {

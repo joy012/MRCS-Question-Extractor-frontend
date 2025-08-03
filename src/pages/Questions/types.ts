@@ -1,17 +1,5 @@
 import type { CategoryInfo, IntakeInfo, Question, YearInfo } from '../../types';
 
-// Extended Question interface to include extraction metadata
-export interface ExtendedQuestion extends Question {
-  pageNumber?: number;
-  examYear?: number;
-  extractionMetadata?: {
-    confidence?: number;
-    manuallyVerified?: boolean;
-    extractedAt?: string;
-    aiModel?: string;
-  };
-}
-
 // Pagination props
 export interface PaginationProps {
   currentPage: number;
@@ -23,8 +11,8 @@ export interface PaginationProps {
 
 // Question card props
 export interface QuestionCardProps {
-  question: ExtendedQuestion;
-  onEdit: (question: ExtendedQuestion) => void;
+  question: Question;
+  onEdit: (question: Question) => void;
   onDelete: (questionId: string) => void;
   onApprove: (questionId: string) => void;
   onReject: (questionId: string) => void;
@@ -52,6 +40,12 @@ export interface QuestionsFiltersProps {
   categories?: CategoryInfo[];
   intakes?: IntakeInfo[];
   years?: YearInfo[];
+  // Pagination props
+  currentPage?: number;
+  totalPages?: number;
+  totalItems?: number;
+  itemsPerPage?: number;
+  onPageChange?: (page: number) => void;
 }
 
 // Statistics data
@@ -64,7 +58,7 @@ export interface QuestionsStatsTypes {
 
 // Question actions
 export interface QuestionActions {
-  onEdit: (question: ExtendedQuestion) => void;
+  onEdit: (question: Question) => void;
   onDelete: (questionId: string) => void;
   onApprove: (questionId: string) => void;
   onReject: (questionId: string) => void;
