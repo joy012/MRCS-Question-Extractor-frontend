@@ -86,7 +86,7 @@ const QuestionCategories = ({ categories }: { categories: QuestionCardProps['que
 // Answer options component
 const AnswerOptions = ({ question }: { question: QuestionCardProps['question'] }) => {
   const validOptions = Object.entries(question.options).filter(([key]) =>
-    ['A', 'B', 'C', 'D'].includes(key)
+    ['A', 'B', 'C', 'D', 'E'].includes(key)
   );
 
   return (
@@ -203,7 +203,17 @@ export const QuestionCard = ({ question, onEdit, onDelete, onApprove, onReject, 
             {/* Header Row */}
             <div className="flex items-center justify-between mb-2">
               <QuestionMetadata question={question} serialNumber={serialNumber} />
-              <QuestionDropdown question={question} onEdit={onEdit} onDelete={onDelete} />
+              <div className='flex flex-row gap-1'>
+                <QuestionDropdown question={question} onEdit={onEdit} onDelete={onDelete} />
+                <QuestionActions
+                  question={question}
+                  onEdit={onEdit}
+                  onDelete={onDelete}
+                  onApprove={onApprove}
+                  onReject={onReject}
+                  serialNumber={serialNumber}
+                />
+              </div>
             </div>
 
             {/* Intake Information */}
@@ -223,15 +233,7 @@ export const QuestionCard = ({ question, onEdit, onDelete, onApprove, onReject, 
             <AnswerOptions question={question} />
           </div>
 
-          {/* Right Section - Action Buttons */}
-          <QuestionActions
-            question={question}
-            onEdit={onEdit}
-            onDelete={onDelete}
-            onApprove={onApprove}
-            onReject={onReject}
-            serialNumber={serialNumber}
-          />
+
         </div>
       </CardContent>
     </Card>
