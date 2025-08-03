@@ -118,6 +118,7 @@ const QuestionsPage = () => {
               <Button
                 variant="outline"
                 onClick={handleExport}
+                disabled
                 className="bg-white/80 backdrop-blur-sm border-gray-200 hover:bg-white hover:border-gray-300 shadow-sm"
               >
                 <Download className="w-4 h-4 mr-2" />
