@@ -1,3 +1,4 @@
+import type { Question } from '@/types';
 import {
   AlertCircle,
   BarChart3,
@@ -8,7 +9,7 @@ import { EmptyState } from '../../../components/common/EmptyState';
 import { Button } from '../../../components/ui/button';
 import { Card, CardContent } from '../../../components/ui/card';
 import { Skeleton } from '../../../components/ui/skeleton';
-import type { ExtendedQuestion, QuestionActions } from '../types';
+import type { QuestionActions } from '../types';
 import { QuestionCard } from './QuestionCard';
 
 // Skeleton loader for questions grid
@@ -90,7 +91,7 @@ const QuestionsEmpty = ({ searchTerm, statusFilter }: { searchTerm: string; stat
 );
 
 interface QuestionsListProps {
-  questions: ExtendedQuestion[];
+  questions: Question[];
   isLoading: boolean;
   error: Error | null;
   currentPage: number;
