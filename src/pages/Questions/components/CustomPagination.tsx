@@ -2,7 +2,7 @@ import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-r
 import { Button } from '../../../components/ui/button';
 import type { PaginationProps } from '../types';
 
-export const Pagination = ({
+export const CustomPagination = ({
   currentPage,
   totalPages,
   totalItems,

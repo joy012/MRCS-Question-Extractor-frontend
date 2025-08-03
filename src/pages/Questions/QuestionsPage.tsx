@@ -17,6 +17,7 @@ import {
   useUpdateQuestionStatusMutation
 } from '../../services/queries/useQuestions';
 import { QuestionStatus, type Question } from '../../types';
+import { CustomPagination } from './components/CustomPagination';
 import { QuestionsFilters } from './components/QuestionsFilters';
 import { QuestionsList } from './components/QuestionsList';
 import { useQuestionsFilters } from './hooks/useQuestionsFilters';
@@ -185,12 +186,6 @@ const QuestionsPage = () => {
             sortOrder={sortOrder}
             onSortOrderChange={handleSortOrder}
             categories={categories || []}
-            // Pagination props
-            currentPage={currentPage}
-            totalPages={totalPages}
-            totalItems={totalQuestions}
-            itemsPerPage={itemsPerPage}
-            onPageChange={handlePageChange}
           />
         </CardContent>
       </Card>
@@ -208,6 +203,17 @@ const QuestionsPage = () => {
         onRetry={() => questionsQuery.refetch()}
         actions={actions}
       />
+      {totalPages > 1 ? (
+        <div className="bg-white border border-gray-200 rounded-lg py-3 px-10 shadow-sm">
+          <CustomPagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={totalQuestions}
+            itemsPerPage={itemsPerPage}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      ) : null}
     </div>
   );
 };

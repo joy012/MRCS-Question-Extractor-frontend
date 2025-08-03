@@ -15,7 +15,6 @@ import { DEFAULT_CATEGORIES } from '../../../constants/categories';
 import { DEFAULT_INTAKES } from '../../../constants/intakes';
 import { useGetQuestionCategoriesQuery, useGetQuestionIntakesQuery, useGetQuestionYearsQuery } from '../../../services/queries/useQuestions';
 import type { QuestionsFiltersProps } from '../types';
-import { Pagination } from './Pagination';
 
 // Utility function to get category display name
 const getCategoryDisplayName = (categoryName: string): string => {
@@ -251,12 +250,7 @@ export const QuestionsFilters = ({
   categories: propCategories,
   intakes: propIntakes,
   years: propYears,
-  // Pagination props
-  currentPage,
-  totalPages,
-  totalItems,
-  itemsPerPage,
-  onPageChange,
+
 }: QuestionsFiltersProps) => {
   const { data: categories = [] } = useGetQuestionCategoriesQuery();
   const { data: intakes = [] } = useGetQuestionIntakesQuery();
@@ -302,18 +296,7 @@ export const QuestionsFilters = ({
         </div>
       </div>
 
-      {/* Compact Pagination Section */}
-      {(currentPage && totalPages && totalItems && itemsPerPage && onPageChange && totalPages > 1) ? (
-        <div className="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            totalItems={totalItems}
-            itemsPerPage={itemsPerPage}
-            onPageChange={onPageChange}
-          />
-        </div>
-      ) : null}
+
     </div>
   );
 }; 

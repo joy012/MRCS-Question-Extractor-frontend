@@ -40,12 +40,6 @@ export interface QuestionsFiltersProps {
   categories?: CategoryInfo[];
   intakes?: IntakeInfo[];
   years?: YearInfo[];
-  // Pagination props
-  currentPage?: number;
-  totalPages?: number;
-  totalItems?: number;
-  itemsPerPage?: number;
-  onPageChange?: (page: number) => void;
 }
 
 // Statistics data

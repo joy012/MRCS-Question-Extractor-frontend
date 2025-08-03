@@ -53,6 +53,16 @@ export class ExtractionService {
     return api.delete<{ message: string }>('/extraction/stop');
   }
 
+  // Continue extraction from last processed page
+  static async continueExtraction(): Promise<{
+    message: string;
+    extractionId: string;
+  }> {
+    return api.post<{ message: string; extractionId: string }>(
+      '/extraction/continue'
+    );
+  }
+
   // Get current extraction status
   static async getStatus(): Promise<ExtractionState> {
     return api.get<ExtractionState>('/extraction/status');

@@ -34,7 +34,7 @@ export const useQuestionsFilters = () => {
   const [currentPage, setCurrentPage] = useState(
     parseInt(searchParams.get('page') || '1')
   );
-  const [itemsPerPage] = useState(10);
+  const [itemsPerPage] = useState(50);
 
   // Update URL params when filters change
   const updateUrlParams = useCallback(

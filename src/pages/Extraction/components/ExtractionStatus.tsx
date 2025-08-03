@@ -1,4 +1,4 @@
-import { Activity, AlertCircle, CheckCircle, Clock, RefreshCw, Square, Target, XCircle, Zap } from 'lucide-react';
+import { Activity, AlertCircle, CheckCircle, Clock, Play, RefreshCw, Square, Target, Trash2, XCircle, Zap } from 'lucide-react';
 import React from 'react';
 import { Alert, AlertDescription } from '../../../components/ui/alert';
 import { Badge } from '../../../components/ui/badge';
@@ -6,7 +6,7 @@ import { Button } from '../../../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
 import { Progress } from '../../../components/ui/progress';
 import { useToastHelpers } from '../../../components/ui/toast';
-import { useStopExtractionMutation } from '../../../services/queries/useExtraction';
+import { useContinueExtractionMutation, useStopExtractionMutation } from '../../../services/queries/useExtraction';
 import type { ExtractionState } from './types';
 
 interface ExtractionStatusProps {
@@ -19,6 +19,7 @@ export const ExtractionStatus: React.FC<ExtractionStatusProps> = ({
   onClearState
 }) => {
   const stopExtractionMutation = useStopExtractionMutation();
+  const continueExtractionMutation = useContinueExtractionMutation();
   const { success, error } = useToastHelpers();
 
   const handleStopExtraction = async () => {
@@ -28,6 +29,16 @@ export const ExtractionStatus: React.FC<ExtractionStatusProps> = ({
     } catch (err: any) {
       console.error('Failed to stop extraction:', err);
       error('Error', 'Failed to stop extraction');
+    }
+  };
+
+  const handleContinueExtraction = async () => {
+    try {
+      await continueExtractionMutation.mutateAsync();
+      success('Success', 'Extraction continued successfully');
+    } catch (err: any) {
+      console.error('Failed to continue extraction:', err);
+      error('Error', 'Failed to continue extraction');
     }
   };
 
@@ -181,13 +192,46 @@ export const ExtractionStatus: React.FC<ExtractionStatusProps> = ({
                 )}
               </Button>
             )}
-            {extractionState.status !== 'idle' && (
+            {extractionState.status === 'stopped' && (
+              <>
+                <Button
+                  variant="default"
+                  size="sm"
+                  onClick={handleContinueExtraction}
+                  disabled={continueExtractionMutation.isPending}
+                  className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 shadow-md"
+                >
+                  {continueExtractionMutation.isPending ? (
+                    <>
+                      <RefreshCw className="h-3 w-3 mr-1 animate-spin" />
+                      Continuing...
+                    </>
+                  ) : (
+                    <>
+                      <Play className="h-3 w-3 mr-1" />
+                      Continue Extraction
+                    </>
+                  )}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={onClearState}
+                  className="bg-white/80 backdrop-blur-sm border-gray-200 hover:bg-white hover:border-gray-300"
+                >
+                  <Trash2 className="h-3 w-3 mr-1" />
+                  Clear State
+                </Button>
+              </>
+            )}
+            {extractionState.status !== 'idle' && extractionState.status !== 'stopped' && extractionState.status !== 'processing' && (
               <Button
                 variant="outline"
                 size="sm"
                 onClick={onClearState}
                 className="bg-white/80 backdrop-blur-sm border-gray-200 hover:bg-white hover:border-gray-300"
               >
+                <Trash2 className="h-3 w-3 mr-1" />
                 Clear State
               </Button>
             )}

@@ -169,6 +169,38 @@ export const useStopExtractionMutation = () => {
   });
 };
 
+// Continue extraction mutation
+export const useContinueExtractionMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async () => {
+      try {
+        const result = await ExtractionService.continueExtraction();
+        return result;
+      } catch (error) {
+        console.error('Continue extraction failed:', error);
+        throw error;
+      }
+    },
+    onSuccess: (data) => {
+      console.log('Extraction continued:', data);
+
+      // Invalidate and refetch extraction-related queries
+      invalidateQueries.extraction.all();
+    },
+    onError: (error) => {
+      console.error('Continue extraction error:', error);
+    },
+    onSettled: () => {
+      // Always refetch status after completion
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.extraction.status(),
+      });
+    },
+  });
+};
+
 // Clear extraction state mutation
 export const useClearExtractionStateMutation = () => {
   return useMutation({
