@@ -5,8 +5,7 @@ import { useClearExtractionStateMutation, useGetExtractionLogsQuery, useGetExtra
 import {
   ExtractionHeader,
   ExtractionLogs,
-  ExtractionStatistics,
-  ExtractionStatus,
+  ExtractionStatus
 } from './components';
 
 const ExtractionMonitor: React.FC = () => {
@@ -59,8 +58,6 @@ const ExtractionMonitor: React.FC = () => {
         onClearState={handleClearState}
       />
 
-      {/* Statistics */}
-      <ExtractionStatistics extractionState={extractionState} />
 
       {/* Logs */}
       <ExtractionLogs

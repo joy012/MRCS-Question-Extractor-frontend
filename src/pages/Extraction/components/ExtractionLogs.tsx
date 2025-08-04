@@ -1,6 +1,6 @@
 import { Activity, AlertCircle, CheckCircle, Clock, FileText } from 'lucide-react';
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
+import { Card, CardContent, CardHeader } from '../../../components/ui/card';
 import { ScrollArea } from '../../../components/ui/scroll-area';
 
 interface ExtractionLogsProps {
@@ -46,36 +46,18 @@ export const ExtractionLogs: React.FC<ExtractionLogsProps> = ({
   return (
     <div className="space-y-4">
       {/* Compact Header */}
-      <div className="flex items-center gap-2">
-        <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md">
-          <FileText className="h-4 w-4 text-white" />
-        </div>
-        <div>
-          <h2 className="text-lg font-semibold text-gray-900">Live Activity Logs</h2>
-          <p className="text-xs text-gray-600">Real-time extraction activity monitoring</p>
-        </div>
-      </div>
+
 
       {/* Compact Logs Container */}
       <Card className="border-0 shadow-md bg-gradient-to-br from-gray-50 to-gray-100/50">
         <CardHeader className="pb-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-md bg-indigo-500/10 flex items-center justify-center">
-                <Activity className="h-3 w-3 text-indigo-600" />
-              </div>
-              <div>
-                <CardTitle className="text-base font-semibold text-gray-900">
-                  Activity Stream
-                </CardTitle>
-                <p className="text-xs text-gray-600">
-                  {logs.length} log entries • Live monitoring
-                </p>
-              </div>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md">
+              <FileText className="h-4 w-4 text-white" />
             </div>
-            <div className="flex items-center gap-1">
-              <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-xs text-green-600 font-medium">Live</span>
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900">Live Activity Logs</h2>
+              <p className="text-xs text-gray-600">Total logs: {logs.length}</p>
             </div>
           </div>
         </CardHeader>

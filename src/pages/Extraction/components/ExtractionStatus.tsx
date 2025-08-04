@@ -152,12 +152,18 @@ export const ExtractionStatus: React.FC<ExtractionStatusProps> = ({
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full opacity-20"></div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-3 gap-3">
                 <div className="text-center p-2 bg-white/60 backdrop-blur-sm rounded-md border border-white/50">
                   <div className="text-sm font-bold text-gray-900">
                     {extractionState.processedPages}
                   </div>
                   <div className="text-xs text-gray-600">Pages Processed</div>
+                </div>
+                <div className="text-center p-2 bg-white/60 backdrop-blur-sm rounded-md border border-white/50">
+                  <div className="text-sm font-bold text-gray-900">
+                    {extractionState.extractedQuestions}
+                  </div>
+                  <div className="text-xs text-gray-600">Extracted Questions</div>
                 </div>
                 <div className="text-center p-2 bg-white/60 backdrop-blur-sm rounded-md border border-white/50">
                   <div className="text-sm font-bold text-gray-900">
