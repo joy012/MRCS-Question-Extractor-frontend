@@ -31,11 +31,7 @@ const getCategoryDisplayName = (category: any) => {
   return `${type.charAt(0) + type.slice(1).toLowerCase()}-${displayName}`;
 };
 
-const getIntakeDisplayName = (intake: any) => {
-  const type = intake.type || 'JANUARY';
-  const year = intake.year || new Date().getFullYear();
-  return `${type} ${year}`;
-};
+
 
 // Question metadata component
 const QuestionMetadata = ({ question, serialNumber }: { question: QuestionCardProps['question']; serialNumber: number }) => {
@@ -59,11 +55,11 @@ const QuestionMetadata = ({ question, serialNumber }: { question: QuestionCardPr
 };
 
 // Intake information component
-const IntakeInfo = ({ intake }: { intake: QuestionCardProps['question']['intake'] }) => (
+const IntakeInfo = ({ intake, year }: { intake: string, year: number }) => (
   <div className="flex items-center gap-2 mb-2">
     <div className="flex items-center gap-1.5 text-xs text-gray-600">
       <BookOpen className="w-3 h-3" />
-      <span className="font-medium">{getIntakeDisplayName(intake)}</span>
+      <span className="font-medium">{intake} {year}</span>
     </div>
   </div>
 );
@@ -217,7 +213,7 @@ export const QuestionCard = ({ question, onEdit, onDelete, onApprove, onReject, 
             </div>
 
             {/* Intake Information */}
-            <IntakeInfo intake={question.intake} />
+            <IntakeInfo intake={question.intake.displayName} year={question.year} />
 
             {/* Categories */}
             <QuestionCategories categories={question.categories} />

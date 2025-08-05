@@ -108,7 +108,7 @@ const Settings = () => {
                 <HardDrive className="h-6 w-6 text-purple-600" />
               </div>
               <div className="text-2xl font-bold text-gray-900">
-                ~{((questionStats?.total || 0) * 0.001).toFixed(1)} MB
+                ~{((questionStats?.total || 0) * 0.0006148282).toFixed(1)} MB
               </div>
               <p className="text-sm text-gray-600">Storage Usage</p>
             </div>
@@ -117,7 +117,7 @@ const Settings = () => {
           <div className="space-y-3">
             <div className="flex justify-between text-sm">
               <span className="text-gray-600">Storage Usage</span>
-              <span className="text-gray-900 font-medium">~{(questionStats?.total || 0) * 0.001} MB</span>
+              <span className="text-gray-900 font-medium">~{((questionStats?.total || 0) * 0.0006148282).toFixed(1)} MB</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-3">
               <div
