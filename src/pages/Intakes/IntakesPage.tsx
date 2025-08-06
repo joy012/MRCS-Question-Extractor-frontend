@@ -139,14 +139,9 @@ const IntakesPage: React.FC = () => {
                 <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 shadow-lg">
                   <Calendar className="h-6 w-6 text-white" />
                 </div>
-                <div>
-                  <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-                    Intakes Management
-                  </h1>
-                  <p className="text-gray-600 mt-1">
-                    Manage exam intakes and organize questions by examination periods
-                  </p>
-                </div>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+                  Intakes Management
+                </h1>
               </div>
             </div>
 

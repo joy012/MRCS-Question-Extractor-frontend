@@ -54,14 +54,9 @@ const Settings = () => {
                 <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 shadow-lg">
                   <SettingsIcon className="h-6 w-6 text-white" />
                 </div>
-                <div>
-                  <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-                    System Settings
-                  </h1>
-                  <p className="text-gray-600 mt-1">
-                    Manage database, system configuration, and data management
-                  </p>
-                </div>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+                  System Settings
+                </h1>
               </div>
             </div>
           </div>

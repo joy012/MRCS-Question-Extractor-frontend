@@ -55,14 +55,9 @@ export const ExtractionHeader: React.FC<ExtractionHeaderProps> = ({
                 <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 shadow-md">
                   <BarChart3 className="h-4 w-4 text-white" />
                 </div>
-                <div>
-                  <h1 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-                    Extraction Monitor
-                  </h1>
-                  <p className="text-xs text-gray-600">
-                    Advanced AI-powered question extraction system
-                  </p>
-                </div>
+                <h1 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+                  Extraction Monitor
+                </h1>
               </div>
             </div>
 

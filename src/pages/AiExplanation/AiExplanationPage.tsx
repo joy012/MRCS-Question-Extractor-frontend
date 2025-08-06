@@ -121,14 +121,9 @@ const AiExplanationPage = () => {
                 <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 shadow-lg">
                   <Brain className="h-6 w-6 text-white" />
                 </div>
-                <div>
-                  <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-                    AI Question Explanations
-                  </h1>
-                  <p className="text-gray-600 mt-1">
-                    Generate comprehensive explanations for medical exam questions using Meditron AI
-                  </p>
-                </div>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+                  AI Question Explanations
+                </h1>
               </div>
             </div>
 
@@ -278,8 +273,8 @@ const AiExplanationPage = () => {
                 statusDisplay.text
               )}
             </div>
-            <p className="text-xs text-gray-500 mt-1">
-              {status?.model || 'meditron'} model
+            <p className="text-xs text-gray-500 mt-1 capitalize">
+              {status?.model || 'Meditron'} model
             </p>
           </CardContent>
         </Card>
