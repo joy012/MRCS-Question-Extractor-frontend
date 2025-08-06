@@ -145,7 +145,7 @@ export const QuestionsList = ({
       </div>
 
       {/* Questions List */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {questions.map((question, index) => (
           <QuestionCard
             key={question.id}

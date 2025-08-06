@@ -20,7 +20,7 @@ const getCategoryDisplayName = (categoryName: string): string => {
   const category = DEFAULT_CATEGORIES.find(cat => cat.name === categoryName);
   if (!category) return categoryName;
 
-  return `${category.type}-${category.displayName}`;
+  return category.type.toLocaleLowerCase() === 'clinical' ? `${category.displayName}` : `${category.type}-${category.displayName}`;
 };
 
 // Utility function to get intake display name
@@ -80,7 +80,7 @@ const StatusFilter = ({ statusFilter, onStatusFilterChange, explanationFilter, o
   return (
     <FilterWrapper active={currentValue !== 'all'}>
       <Select value={currentValue} onValueChange={handleValueChange}>
-        <SelectTrigger className="w-36 h-9 bg-white/90 backdrop-blur-sm border-gray-200 hover:border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 transition-all duration-200 rounded-lg shadow-sm">
+        <SelectTrigger className="w-max h-9 bg-white/90 backdrop-blur-sm border-gray-200 hover:border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 transition-all duration-200 rounded-lg shadow-sm">
           <Filter className="w-3.5 h-3.5 mr-2 text-gray-500" />
           <SelectValue placeholder="Status" />
         </SelectTrigger>
@@ -88,7 +88,7 @@ const StatusFilter = ({ statusFilter, onStatusFilterChange, explanationFilter, o
           <SelectItem value="all" className="hover:bg-gray-50 rounded-md">
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-              <span className="text-sm">All Q</span>
+              <span className="text-sm">All Questions</span>
             </div>
           </SelectItem>
           <SelectItem value="APPROVED" className="hover:bg-green-50 rounded-md">
@@ -131,7 +131,7 @@ const StatusFilter = ({ statusFilter, onStatusFilterChange, explanationFilter, o
 const CategoryFilter = ({ categoryFilter, onCategoryFilterChange, categories }: Pick<QuestionsFiltersProps, 'categoryFilter' | 'onCategoryFilterChange' | 'categories'>) => (
   <FilterWrapper active={categoryFilter !== 'all'}>
     <Select value={categoryFilter} onValueChange={onCategoryFilterChange}>
-      <SelectTrigger className="w-36 h-9 bg-white/90 backdrop-blur-sm border-gray-200 hover:border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 transition-all duration-200 rounded-lg shadow-sm">
+      <SelectTrigger className="w-max h-9 bg-white/90 backdrop-blur-sm border-gray-200 hover:border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 transition-all duration-200 rounded-lg shadow-sm">
         <Tag className="w-3.5 h-3.5 mr-2 text-gray-500" />
         <SelectValue placeholder="Category" />
       </SelectTrigger>
@@ -139,7 +139,7 @@ const CategoryFilter = ({ categoryFilter, onCategoryFilterChange, categories }: 
         <SelectItem value="all" className="hover:bg-gray-50 rounded-md">
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-            <span className="text-sm">All Cate</span>
+            <span className="text-sm">All categories</span>
           </div>
         </SelectItem>
         {Array.isArray(categories) && categories.map((category) => (
@@ -162,7 +162,7 @@ const CategoryFilter = ({ categoryFilter, onCategoryFilterChange, categories }: 
 const IntakeFilter = ({ intakeFilter, onIntakeFilterChange, intakes }: Pick<QuestionsFiltersProps, 'intakeFilter' | 'onIntakeFilterChange' | 'intakes'>) => (
   <FilterWrapper active={intakeFilter !== 'all'}>
     <Select value={intakeFilter} onValueChange={onIntakeFilterChange}>
-      <SelectTrigger className="w-36 h-9 bg-white/90 backdrop-blur-sm border-gray-200 hover:border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 transition-all duration-200 rounded-lg shadow-sm">
+      <SelectTrigger className="w-max h-9 bg-white/90 backdrop-blur-sm border-gray-200 hover:border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 transition-all duration-200 rounded-lg shadow-sm">
         <Calendar className="w-3.5 h-3.5 mr-2 text-gray-500" />
         <SelectValue placeholder="Intake" />
       </SelectTrigger>
@@ -170,7 +170,7 @@ const IntakeFilter = ({ intakeFilter, onIntakeFilterChange, intakes }: Pick<Ques
         <SelectItem value="all" className="hover:bg-gray-50 rounded-md">
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-            <span className="text-sm">All Intal</span>
+            <span className="text-sm">All intakes</span>
           </div>
         </SelectItem>
         {Array.isArray(intakes) && intakes.map((intake) => (
@@ -193,7 +193,7 @@ const IntakeFilter = ({ intakeFilter, onIntakeFilterChange, intakes }: Pick<Ques
 const YearFilter = ({ yearFilter, onYearFilterChange, years }: Pick<QuestionsFiltersProps, 'yearFilter' | 'onYearFilterChange' | 'years'>) => (
   <FilterWrapper active={yearFilter !== 'all'}>
     <Select value={yearFilter} onValueChange={onYearFilterChange}>
-      <SelectTrigger className="w-28 h-9 bg-white/90 backdrop-blur-sm border-gray-200 hover:border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 transition-all duration-200 rounded-lg shadow-sm">
+      <SelectTrigger className="w-max h-9 bg-white/90 backdrop-blur-sm border-gray-200 hover:border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 transition-all duration-200 rounded-lg shadow-sm">
         <Clock className="w-3.5 h-3.5 mr-2 text-gray-500" />
         <SelectValue placeholder="Year" />
       </SelectTrigger>
@@ -201,7 +201,7 @@ const YearFilter = ({ yearFilter, onYearFilterChange, years }: Pick<QuestionsFil
         <SelectItem value="all" className="hover:bg-gray-50 rounded-md">
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-            <span className="text-sm">All</span>
+            <span className="text-sm">All years</span>
           </div>
         </SelectItem>
         {Array.isArray(years) && years.map((year) => (
@@ -253,7 +253,7 @@ export const QuestionsFilters = ({
       {/* Compact Search and Filters Row */}
       <div className="space-y-3">
         {/* Search Input */}
-        <div className="flex flex-col sm:flex-row gap-2">
+        <div className="flex flex-col lg:flex-row gap-2">
           <SearchInput searchTerm={searchTerm} onSearchChange={onSearchChange} />
 
           {/* Filter Controls */}
