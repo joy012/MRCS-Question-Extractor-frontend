@@ -152,8 +152,6 @@ export const QuestionsList = ({
             question={question}
             onEdit={actions.onEdit}
             onDelete={actions.onDelete}
-            onApprove={actions.onApprove}
-            onReject={actions.onReject}
             serialNumber={(currentPage - 1) * itemsPerPage + index + 1}
           />
         ))}

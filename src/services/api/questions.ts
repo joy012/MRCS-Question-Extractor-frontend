@@ -30,8 +30,8 @@ export class QuestionsService {
     if (params.search) searchParams.append('search', params.search);
     if (params.sortBy) searchParams.append('sortBy', params.sortBy);
     if (params.sortOrder) searchParams.append('sortOrder', params.sortOrder);
-    if (params.minConfidence)
-      searchParams.append('minConfidence', params.minConfidence.toString());
+    if (params.explanation)
+      searchParams.append('explanation', params.explanation);
 
     const queryString = searchParams.toString();
     const url = queryString ? `/questions?${queryString}` : '/questions';

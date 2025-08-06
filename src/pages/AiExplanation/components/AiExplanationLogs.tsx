@@ -3,15 +3,15 @@ import React from 'react';
 import { Card, CardContent, CardHeader } from '../../../components/ui/card';
 import { ScrollArea } from '../../../components/ui/scroll-area';
 
-interface ExtractionLogsProps {
+interface AiExplanationLogsProps {
   logs: string[];
-  isProcessing: boolean;
+  maxHeight?: string;
 }
 
-export const ExtractionLogs: React.FC<ExtractionLogsProps> = ({
+export const AiExplanationLogs: React.FC<AiExplanationLogsProps> = ({
   logs,
 }) => {
-  // Only show logs when processing and logs exist
+  // Only show logs when logs exist
   if (!logs || logs.length === 0) {
     return null;
   }
@@ -45,9 +45,6 @@ export const ExtractionLogs: React.FC<ExtractionLogsProps> = ({
   return (
     <div className="space-y-4">
       {/* Compact Header */}
-
-
-      {/* Compact Logs Container */}
       <Card className="border-0 shadow-md bg-gradient-to-br from-gray-50 to-gray-100/50">
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
@@ -55,7 +52,7 @@ export const ExtractionLogs: React.FC<ExtractionLogsProps> = ({
               <FileText className="h-4 w-4 text-white" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">Live Activity Logs</h2>
+              <h2 className="text-lg font-semibold text-gray-900">AI Explanation Logs</h2>
               <p className="text-xs text-gray-600">Total logs: {logs.length}</p>
             </div>
           </div>

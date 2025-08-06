@@ -34,7 +34,7 @@ export const queryKeys = {
         params.categories,
         params.intake,
         params.limit,
-        params.minConfidence,
+        params.explanation,
         params.page,
         params.search,
         params.sortBy,

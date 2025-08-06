@@ -17,7 +17,9 @@ import {
   X
 } from 'lucide-react';
 import React, { useCallback, useMemo, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import remarkGfm from 'remark-gfm';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -431,7 +433,31 @@ const QuestionDetail = () => {
                   />
                 ) : question.explanation ? (
                   <div className="p-4 bg-muted/50 rounded-lg border">
-                    <p className="text-foreground whitespace-pre-wrap leading-relaxed">{question.explanation}</p>
+                    <div className="prose prose-sm max-w-none text-foreground leading-relaxed">
+                      <ReactMarkdown
+                        remarkPlugins={[remarkGfm]}
+                        rehypePlugins={[]}
+                        components={{
+                          h1: ({ children }) => <h1 className="text-xl font-bold mt-6 mb-3 text-foreground">{children}</h1>,
+                          h2: ({ children }) => <h2 className="text-lg font-semibold mt-5 mb-2 text-foreground">{children}</h2>,
+                          h3: ({ children }) => <h3 className="text-base font-medium mt-4 mb-2 text-foreground">{children}</h3>,
+                          h4: ({ children }) => <h4 className="text-sm font-medium mt-3 mb-1 text-foreground">{children}</h4>,
+                          p: ({ children }) => <p className="mb-3 text-sm leading-relaxed whitespace-pre-wrap">{children}</p>,
+                          ul: ({ children }) => <ul className="mb-4 ml-6 space-y-1 list-disc text-sm">{children}</ul>,
+                          ol: ({ children }) => <ol className="mb-4 ml-6 space-y-1 list-decimal text-sm">{children}</ol>,
+                          li: ({ children }) => <li className="text-sm leading-relaxed mb-1">{children}</li>,
+                          strong: ({ children }) => <strong className="font-semibold text-foreground">{children}</strong>,
+                          em: ({ children }) => <em className="italic text-foreground">{children}</em>,
+                          code: ({ children }) => <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono text-foreground">{children}</code>,
+                          pre: ({ children }) => <pre className="bg-muted p-3 rounded text-xs font-mono overflow-x-auto mb-3">{children}</pre>,
+                          blockquote: ({ children }) => <blockquote className="border-l-4 border-border pl-4 italic text-muted-foreground mb-3">{children}</blockquote>,
+                          hr: () => <hr className="my-4 border-border" />,
+                          br: () => <br />,
+                        }}
+                      >
+                        {question.explanation}
+                      </ReactMarkdown>
+                    </div>
                   </div>
                 ) : (
                   <p className="text-muted-foreground italic text-sm">No explanation provided</p>

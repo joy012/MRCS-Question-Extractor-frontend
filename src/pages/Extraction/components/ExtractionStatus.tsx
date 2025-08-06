@@ -1,4 +1,5 @@
-import { Activity, AlertCircle, CheckCircle, Clock, Play, RefreshCw, Square, Target, Trash2, XCircle, Zap } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Activity, AlertCircle, CheckCircle, Clock, Play, RefreshCw, Square, Target, XCircle, Zap } from 'lucide-react';
 import React from 'react';
 import { Alert, AlertDescription } from '../../../components/ui/alert';
 import { Badge } from '../../../components/ui/badge';
@@ -11,12 +12,10 @@ import type { ExtractionState } from './types';
 
 interface ExtractionStatusProps {
   extractionState: ExtractionState;
-  onClearState: () => void;
 }
 
 export const ExtractionStatus: React.FC<ExtractionStatusProps> = ({
-  extractionState,
-  onClearState
+  extractionState
 }) => {
   const stopExtractionMutation = useStopExtractionMutation();
   const continueExtractionMutation = useContinueExtractionMutation();
@@ -134,46 +133,45 @@ export const ExtractionStatus: React.FC<ExtractionStatusProps> = ({
           )}
 
           {/* Compact Progress Section */}
-          {extractionState.status === 'processing' && (
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Zap className="h-3 w-3 text-blue-600" />
-                  <span className="font-medium text-sm text-gray-900">Progress</span>
-                </div>
-                <span className="text-xl font-bold text-blue-600">{extractionState.progress}%</span>
-              </div>
 
-              <div className="relative">
-                <Progress
-                  value={extractionState.progress}
-                  className="h-2 bg-blue-100"
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full opacity-20"></div>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Zap className="h-3 w-3 text-blue-600" />
+                <span className="font-medium text-sm text-gray-900">Progress</span>
               </div>
+              <span className="text-xl font-bold text-blue-600">{extractionState.progress}%</span>
+            </div>
 
-              <div className="grid grid-cols-3 gap-3">
-                <div className="text-center p-2 bg-white/60 backdrop-blur-sm rounded-md border border-white/50">
-                  <div className="text-sm font-bold text-gray-900">
-                    {extractionState.processedPages}
-                  </div>
-                  <div className="text-xs text-gray-600">Pages Processed</div>
+            <div className="relative">
+              <Progress
+                value={extractionState.progress}
+                className={cn('h-2 bg-blue-100', extractionState.status !== 'processing' && 'bg-red-300')}
+              />
+              <div className={cn('absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full opacity-20', extractionState.status !== 'processing' && 'bg-red-300')}></div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3">
+              <div className="text-center p-2 bg-white/60 backdrop-blur-sm rounded-md border border-white/50">
+                <div className="text-sm font-bold text-gray-900">
+                  {extractionState.processedPages}
                 </div>
-                <div className="text-center p-2 bg-white/60 backdrop-blur-sm rounded-md border border-white/50">
-                  <div className="text-sm font-bold text-gray-900">
-                    {extractionState.extractedQuestions}
-                  </div>
-                  <div className="text-xs text-gray-600">Extracted Questions</div>
+                <div className="text-xs text-gray-600">Pages Processed</div>
+              </div>
+              <div className="text-center p-2 bg-white/60 backdrop-blur-sm rounded-md border border-white/50">
+                <div className="text-sm font-bold text-gray-900">
+                  {extractionState.extractedQuestions}
                 </div>
-                <div className="text-center p-2 bg-white/60 backdrop-blur-sm rounded-md border border-white/50">
-                  <div className="text-sm font-bold text-gray-900">
-                    {extractionState.totalPages}
-                  </div>
-                  <div className="text-xs text-gray-600">Total Pages</div>
+                <div className="text-xs text-gray-600">Extracted Questions</div>
+              </div>
+              <div className="text-center p-2 bg-white/60 backdrop-blur-sm rounded-md border border-white/50">
+                <div className="text-sm font-bold text-gray-900">
+                  {extractionState.totalPages}
                 </div>
+                <div className="text-xs text-gray-600">Total Pages</div>
               </div>
             </div>
-          )}
+          </div>
 
           {/* Compact Action Buttons */}
           <div className="flex gap-2">
@@ -219,7 +217,7 @@ export const ExtractionStatus: React.FC<ExtractionStatusProps> = ({
                     </>
                   )}
                 </Button>
-                <Button
+                {/* <Button
                   variant="outline"
                   size="sm"
                   onClick={onClearState}
@@ -227,10 +225,10 @@ export const ExtractionStatus: React.FC<ExtractionStatusProps> = ({
                 >
                   <Trash2 className="h-3 w-3 mr-1" />
                   Clear State
-                </Button>
+                </Button> */}
               </>
             )}
-            {extractionState.status !== 'idle' && extractionState.status !== 'stopped' && extractionState.status !== 'processing' && (
+            {/* {extractionState.status !== 'idle' && extractionState.status !== 'stopped' && extractionState.status !== 'processing' && (
               <Button
                 variant="outline"
                 size="sm"
@@ -240,7 +238,7 @@ export const ExtractionStatus: React.FC<ExtractionStatusProps> = ({
                 <Trash2 className="h-3 w-3 mr-1" />
                 Clear State
               </Button>
-            )}
+            )} */}
           </div>
 
           {/* Compact Error Display */}

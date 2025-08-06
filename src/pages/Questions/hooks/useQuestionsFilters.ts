@@ -25,6 +25,9 @@ export const useQuestionsFilters = () => {
   const [confidenceFilter, setConfidenceFilter] = useState(
     searchParams.get('minConfidence') || 'all'
   );
+  const [explanationFilter, setExplanationFilter] = useState(
+    searchParams.get('explanation') || 'all'
+  );
   const [sortBy, setSortBy] = useState(
     searchParams.get('sortBy') || 'createdAt'
   );
@@ -114,6 +117,18 @@ export const useQuestionsFilters = () => {
     [updateUrlParams]
   );
 
+  const handleExplanationFilter = useCallback(
+    (value: string) => {
+      setExplanationFilter(value);
+      setCurrentPage(1);
+      updateUrlParams({
+        explanation: value === 'all' ? '' : value,
+        page: '1',
+      });
+    },
+    [updateUrlParams]
+  );
+
   const handleSort = useCallback(
     (value: string) => {
       setSortBy(value);
@@ -145,6 +160,7 @@ export const useQuestionsFilters = () => {
     setIntakeFilter('all');
     setYearFilter('all');
     setConfidenceFilter('all');
+    setExplanationFilter('all');
     setSortBy('createdAt');
     setSortOrder('desc');
     setCurrentPage(1);
@@ -160,6 +176,7 @@ export const useQuestionsFilters = () => {
     intakeFilter,
     yearFilter,
     confidenceFilter,
+    explanationFilter,
     sortBy,
     sortOrder,
     currentPage,
@@ -175,6 +192,7 @@ export const useQuestionsFilters = () => {
       handleIntakeFilter,
       handleYearFilter,
       handleConfidenceFilter,
+      handleExplanationFilter,
       handleSort,
       handleSortOrder,
       handlePageChange,

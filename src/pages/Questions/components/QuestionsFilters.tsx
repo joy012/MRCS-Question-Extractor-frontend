@@ -4,7 +4,6 @@ import {
   Filter,
   Search,
   Tag,
-  Target,
   X
 } from 'lucide-react';
 import { Badge } from '../../../components/ui/badge';
@@ -66,42 +65,67 @@ const FilterWrapper = ({ children, active = false }: { children: React.ReactNode
 );
 
 // Compact status filter
-const StatusFilter = ({ statusFilter, onStatusFilterChange }: Pick<QuestionsFiltersProps, 'statusFilter' | 'onStatusFilterChange'>) => (
-  <FilterWrapper active={statusFilter !== 'all'}>
-    <Select value={statusFilter} onValueChange={onStatusFilterChange}>
-      <SelectTrigger className="w-32 h-9 bg-white/90 backdrop-blur-sm border-gray-200 hover:border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 transition-all duration-200 rounded-lg shadow-sm">
-        <Filter className="w-3.5 h-3.5 mr-2 text-gray-500" />
-        <SelectValue placeholder="Status" />
-      </SelectTrigger>
-      <SelectContent className="rounded-lg border-gray-200 shadow-lg">
-        <SelectItem value="all" className="hover:bg-gray-50 rounded-md">
-          <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-            <span className="text-sm">All Q</span>
-          </div>
-        </SelectItem>
-        <SelectItem value="APPROVED" className="hover:bg-green-50 rounded-md">
-          <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-            <span className="text-sm">Approved</span>
-          </div>
-        </SelectItem>
-        <SelectItem value="PENDING" className="hover:bg-yellow-50 rounded-md">
-          <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full"></div>
-            <span className="text-sm">Pending</span>
-          </div>
-        </SelectItem>
-        <SelectItem value="REJECTED" className="hover:bg-red-50 rounded-md">
-          <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
-            <span className="text-sm">Rejected</span>
-          </div>
-        </SelectItem>
-      </SelectContent>
-    </Select>
-  </FilterWrapper>
-);
+const StatusFilter = ({ statusFilter, onStatusFilterChange, explanationFilter, onExplanationFilterChange }: Pick<QuestionsFiltersProps, 'statusFilter' | 'onStatusFilterChange' | 'explanationFilter' | 'onExplanationFilterChange'>) => {
+  const isExplanationFilter = statusFilter === 'with_explanation' || statusFilter === 'without_explanation';
+  const currentValue = isExplanationFilter ? explanationFilter : statusFilter;
+
+  const handleValueChange = (value: string) => {
+    if (value === 'with_explanation' || value === 'without_explanation') {
+      onExplanationFilterChange(value);
+    } else {
+      onStatusFilterChange(value);
+    }
+  };
+
+  return (
+    <FilterWrapper active={currentValue !== 'all'}>
+      <Select value={currentValue} onValueChange={handleValueChange}>
+        <SelectTrigger className="w-36 h-9 bg-white/90 backdrop-blur-sm border-gray-200 hover:border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 transition-all duration-200 rounded-lg shadow-sm">
+          <Filter className="w-3.5 h-3.5 mr-2 text-gray-500" />
+          <SelectValue placeholder="Status" />
+        </SelectTrigger>
+        <SelectContent className="rounded-lg border-gray-200 shadow-lg">
+          <SelectItem value="all" className="hover:bg-gray-50 rounded-md">
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
+              <span className="text-sm">All Q</span>
+            </div>
+          </SelectItem>
+          <SelectItem value="APPROVED" className="hover:bg-green-50 rounded-md">
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+              <span className="text-sm">Approved</span>
+            </div>
+          </SelectItem>
+          <SelectItem value="PENDING" className="hover:bg-yellow-50 rounded-md">
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full"></div>
+              <span className="text-sm">Pending</span>
+            </div>
+          </SelectItem>
+          <SelectItem value="REJECTED" className="hover:bg-red-50 rounded-md">
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
+              <span className="text-sm">Rejected</span>
+            </div>
+          </SelectItem>
+          <SelectItem value="with_explanation" className="hover:bg-purple-50 rounded-md">
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
+              <span className="text-sm">With AI Explanation</span>
+            </div>
+          </SelectItem>
+          <SelectItem value="without_explanation" className="hover:bg-orange-50 rounded-md">
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+              <span className="text-sm">Without AI Explanation</span>
+            </div>
+          </SelectItem>
+        </SelectContent>
+      </Select>
+    </FilterWrapper>
+  );
+};
 
 // Compact category filter
 const CategoryFilter = ({ categoryFilter, onCategoryFilterChange, categories }: Pick<QuestionsFiltersProps, 'categoryFilter' | 'onCategoryFilterChange' | 'categories'>) => (
@@ -196,44 +220,6 @@ const YearFilter = ({ yearFilter, onYearFilterChange, years }: Pick<QuestionsFil
   </FilterWrapper>
 );
 
-// Compact confidence filter
-const ConfidenceFilter = ({ confidenceFilter, onConfidenceFilterChange }: Pick<QuestionsFiltersProps, 'confidenceFilter' | 'onConfidenceFilterChange'>) => (
-  <FilterWrapper active={confidenceFilter !== 'all'}>
-    <Select value={confidenceFilter} onValueChange={onConfidenceFilterChange}>
-      <SelectTrigger className="w-32 h-9 bg-white/90 backdrop-blur-sm border-gray-200 hover:border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 transition-all duration-200 rounded-lg shadow-sm">
-        <Target className="w-3.5 h-3.5 mr-2 text-gray-500" />
-        <SelectValue placeholder="Confidence" />
-      </SelectTrigger>
-      <SelectContent className="rounded-lg border-gray-200 shadow-lg">
-        <SelectItem value="all" className="hover:bg-gray-50 rounded-md">
-          <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-            <span className="text-sm">All</span>
-          </div>
-        </SelectItem>
-        <SelectItem value="0.9" className="hover:bg-green-50 rounded-md">
-          <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-            <span className="text-sm">High (90%+)</span>
-          </div>
-        </SelectItem>
-        <SelectItem value="0.7" className="hover:bg-yellow-50 rounded-md">
-          <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full"></div>
-            <span className="text-sm">Medium (70%+)</span>
-          </div>
-        </SelectItem>
-        <SelectItem value="0.5" className="hover:bg-orange-50 rounded-md">
-          <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
-            <span className="text-sm">Low (50%+)</span>
-          </div>
-        </SelectItem>
-      </SelectContent>
-    </Select>
-  </FilterWrapper>
-);
-
 export const QuestionsFilters = ({
   searchTerm,
   onSearchChange,
@@ -245,8 +231,8 @@ export const QuestionsFilters = ({
   onIntakeFilterChange,
   yearFilter,
   onYearFilterChange,
-  confidenceFilter,
-  onConfidenceFilterChange,
+  explanationFilter,
+  onExplanationFilterChange,
   categories: propCategories,
   intakes: propIntakes,
   years: propYears,
@@ -272,7 +258,7 @@ export const QuestionsFilters = ({
 
           {/* Filter Controls */}
           <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
-            <StatusFilter statusFilter={statusFilter} onStatusFilterChange={onStatusFilterChange} />
+            <StatusFilter statusFilter={statusFilter} onStatusFilterChange={onStatusFilterChange} explanationFilter={explanationFilter} onExplanationFilterChange={onExplanationFilterChange} />
             <CategoryFilter
               categoryFilter={categoryFilter}
               onCategoryFilterChange={onCategoryFilterChange}
@@ -287,10 +273,6 @@ export const QuestionsFilters = ({
               yearFilter={yearFilter}
               onYearFilterChange={onYearFilterChange}
               years={finalYears}
-            />
-            <ConfidenceFilter
-              confidenceFilter={confidenceFilter}
-              onConfidenceFilterChange={onConfidenceFilterChange}
             />
           </div>
         </div>

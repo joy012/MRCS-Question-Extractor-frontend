@@ -10,7 +10,8 @@ import {
   Shield,
   Tag,
   XCircle,
-  Zap
+  Zap,
+  Brain
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '../../lib/utils';
@@ -39,6 +40,12 @@ const navItems: NavItem[] = [
     icon: Zap,
     label: 'Extract Questions',
     description: 'Monitor extraction progress'
+  },
+  {
+    to: '/ai-explanation',
+    icon: Brain,
+    label: 'AI Explanations',
+    description: 'Generate question explanations'
   },
   {
     to: '/questions',

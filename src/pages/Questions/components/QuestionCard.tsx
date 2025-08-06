@@ -1,8 +1,19 @@
-import { BookOpen, CheckCircle, Edit, Eye, MoreVertical, ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { BookOpen, Brain, Edit, Eye, MoreVertical, Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { Link } from 'react-router-dom';
+import remarkGfm from 'remark-gfm';
 import { Badge } from '../../../components/ui/badge';
 import { Button } from '../../../components/ui/button';
 import { Card, CardContent } from '../../../components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '../../../components/ui/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,6 +22,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '../../../components/ui/dropdown-menu';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../../../components/ui/tooltip';
 import type { QuestionCardProps } from '../types';
 
 // Utility functions
@@ -115,47 +132,6 @@ const AnswerOptions = ({ question }: { question: QuestionCardProps['question'] }
   );
 };
 
-// Action buttons component
-const QuestionActions = ({
-  question,
-  onApprove,
-  onReject
-}: QuestionCardProps) => {
-  const isVerified = question.status === 'APPROVED' || false;
-
-  return (
-    <div className="flex flex-col gap-1 min-w-fit">
-      {!isVerified ? (
-        <>
-          <Button
-            size="sm"
-            variant="outline"
-            className="text-emerald-600 border-emerald-200 hover:bg-emerald-50 hover:border-emerald-300 whitespace-nowrap h-7 px-2 text-xs"
-            onClick={() => onApprove(question.id)}
-          >
-            <ThumbsUp className="w-3 h-3 mr-1" />
-            Approve
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300 whitespace-nowrap h-7 px-2 text-xs"
-            onClick={() => onReject(question.id)}
-          >
-            <ThumbsDown className="w-3 h-3 mr-1" />
-            Reject
-          </Button>
-        </>
-      ) : (
-        <Badge className="bg-emerald-100 text-emerald-800 border-emerald-200 whitespace-nowrap text-xs">
-          <CheckCircle className="w-3 h-3 mr-1" />
-          Verified
-        </Badge>
-      )}
-    </div>
-  );
-};
-
 // Dropdown menu component
 const QuestionDropdown = ({ question, onEdit, onDelete }: Pick<QuestionCardProps, 'question' | 'onEdit' | 'onDelete'>) => (
   <DropdownMenu>
@@ -188,50 +164,136 @@ const QuestionDropdown = ({ question, onEdit, onDelete }: Pick<QuestionCardProps
   </DropdownMenu>
 );
 
-// Main QuestionCard component
-export const QuestionCard = ({ question, onEdit, onDelete, onApprove, onReject, serialNumber }: QuestionCardProps) => {
+// AI Explanation Dialog Component
+const AiExplanationDialog = ({
+  question,
+  isOpen,
+  onClose
+}: {
+  question: QuestionCardProps['question'];
+  isOpen: boolean;
+  onClose: () => void;
+}) => {
   return (
-    <Card className="bg-white border border-gray-200 hover:shadow-md transition-all duration-200 group">
-      <CardContent className="p-3">
-        <div className="flex items-start gap-3">
-          {/* Left Section - Question Info */}
-          <div className="flex-1 min-w-0">
-            {/* Header Row */}
-            <div className="flex items-center justify-between mb-2">
-              <QuestionMetadata question={question} serialNumber={serialNumber} />
-              <div className='flex flex-row gap-1'>
-                <QuestionDropdown question={question} onEdit={onEdit} onDelete={onDelete} />
-                <QuestionActions
-                  question={question}
-                  onEdit={onEdit}
-                  onDelete={onDelete}
-                  onApprove={onApprove}
-                  onReject={onReject}
-                  serialNumber={serialNumber}
-                />
-              </div>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <Brain className="h-5 w-5 text-purple-600" />
+            AI Explanation
+          </DialogTitle>
+          <DialogDescription>
+            AI-generated explanation for this medical question
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-4">
+          {/* AI Explanation */}
+          <div className="bg-gradient-to-br from-purple-50 to-indigo-50 p-6 rounded-lg border border-purple-200">
+            <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed">
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[]}
+                components={{
+                  h1: ({ children }) => <h1 className="text-xl font-bold mt-6 mb-3 text-gray-900">{children}</h1>,
+                  h2: ({ children }) => <h2 className="text-lg font-semibold mt-5 mb-2 text-gray-800">{children}</h2>,
+                  h3: ({ children }) => <h3 className="text-base font-medium mt-4 mb-2 text-gray-800">{children}</h3>,
+                  h4: ({ children }) => <h4 className="text-sm font-medium mt-3 mb-1 text-gray-800">{children}</h4>,
+                  p: ({ children }) => <p className="mb-3 text-sm leading-relaxed whitespace-pre-wrap">{children}</p>,
+                  ul: ({ children }) => <ul className="mb-4 ml-6 space-y-1 list-disc text-sm">{children}</ul>,
+                  ol: ({ children }) => <ol className="mb-4 ml-6 space-y-1 list-decimal text-sm">{children}</ol>,
+                  li: ({ children }) => <li className="text-sm leading-relaxed mb-1">{children}</li>,
+                  strong: ({ children }) => <strong className="font-semibold text-gray-900">{children}</strong>,
+                  em: ({ children }) => <em className="italic text-gray-800">{children}</em>,
+                  code: ({ children }) => <code className="bg-gray-100 px-1 py-0.5 rounded text-xs font-mono text-gray-800">{children}</code>,
+                  pre: ({ children }) => <pre className="bg-gray-100 p-3 rounded text-xs font-mono overflow-x-auto mb-3">{children}</pre>,
+                  blockquote: ({ children }) => <blockquote className="border-l-4 border-gray-300 pl-4 italic text-gray-700 mb-3">{children}</blockquote>,
+                  hr: () => <hr className="my-4 border-gray-300" />,
+                  br: () => <br />,
+                }}
+              >
+                {question.explanation || 'No explanation available'}
+              </ReactMarkdown>
             </div>
-
-            {/* Intake Information */}
-            <IntakeInfo intake={question.intake.displayName} year={question.year} />
-
-            {/* Categories */}
-            <QuestionCategories categories={question.categories} />
-
-            {/* Question Text */}
-            <div className="mb-2">
-              <p className="text-sm text-gray-700 leading-relaxed bg-gray-50 p-2.5 rounded border border-gray-100">
-                {question.question}
-              </p>
-            </div>
-
-            {/* Answer Options */}
-            <AnswerOptions question={question} />
           </div>
-
-
         </div>
-      </CardContent>
-    </Card>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+// Main QuestionCard component
+export const QuestionCard = ({ question, onEdit, onDelete, serialNumber }: QuestionCardProps) => {
+  const [isExplanationDialogOpen, setIsExplanationDialogOpen] = useState(false);
+  const hasExplanation = question.explanation && question.explanation.trim() !== '';
+
+  return (
+    <>
+      <Card className="bg-white border border-gray-200 hover:shadow-md transition-all duration-200 group">
+        <CardContent className="p-3">
+          <div className="flex items-start gap-3">
+            {/* Left Section - Question Info */}
+            <div className="flex-1 min-w-0">
+              {/* Header Row */}
+              <div className="flex items-center justify-between mb-2">
+                <QuestionMetadata question={question} serialNumber={serialNumber} />
+                <div className='flex flex-row gap-1'>
+                  {/* AI Explanation Icon */}
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className={`h-8 w-8 p-0 hover:bg-purple-50 relative ${hasExplanation
+                            ? 'text-purple-600 hover:text-purple-700'
+                            : 'text-gray-400 hover:text-gray-600'
+                            }`}
+                          onClick={() => hasExplanation && setIsExplanationDialogOpen(true)}
+
+                        >
+                          <Brain className={cn("h-4 w-4", hasExplanation ? 'text-purple-600' : 'text-gray-400')} />
+
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p className="text-xs">
+                          {hasExplanation ? 'Has AI Explanation' : 'No AI Explanation'}
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+
+                  <QuestionDropdown question={question} onEdit={onEdit} onDelete={onDelete} />
+                </div>
+              </div>
+
+              {/* Intake Information */}
+              <IntakeInfo intake={question.intake.displayName} year={question.year} />
+
+              {/* Categories */}
+              <QuestionCategories categories={question.categories} />
+
+              {/* Question Text */}
+              <div className="mb-2">
+                <p className="text-sm text-gray-700 leading-relaxed bg-gray-50 p-2.5 rounded border border-gray-100">
+                  {question.question}
+                </p>
+              </div>
+
+              {/* Answer Options */}
+              <AnswerOptions question={question} />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* AI Explanation Dialog */}
+      <AiExplanationDialog
+        question={question}
+        isOpen={isExplanationDialogOpen}
+        onClose={() => setIsExplanationDialogOpen(false)}
+      />
+    </>
   );
 }; 

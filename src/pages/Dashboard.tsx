@@ -7,7 +7,8 @@ import {
   Clock,
   Database,
   Download,
-  FileText
+  FileText,
+  Brain
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '../components/ui/badge';
@@ -263,6 +264,12 @@ const Dashboard = () => {
               <Link to="/extraction">
                 <FileText className="mr-2 h-4 w-4" />
                 Extract PDF Questions
+              </Link>
+            </Button>
+            <Button variant="outline" className="w-full justify-start bg-white/80 backdrop-blur-sm border-gray-200 hover:bg-white hover:border-gray-300" asChild>
+              <Link to="/ai-explanation">
+                <Brain className="mr-2 h-4 w-4" />
+                AI Question Explanations
               </Link>
             </Button>
             <Button variant="outline" className="w-full justify-start bg-white/80 backdrop-blur-sm border-gray-200 hover:bg-white hover:border-gray-300" asChild>

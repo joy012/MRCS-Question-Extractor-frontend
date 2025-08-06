@@ -8,6 +8,7 @@ const Dashboard = lazy(() => import('../pages/Dashboard'));
 const QuestionsList = lazy(() => import('../pages/Questions/QuestionsPage'));
 const QuestionDetail = lazy(() => import('../pages/Questions/QuestionDetail'));
 const ExtractionMonitor = lazy(() => import('../pages/Extraction/ExtractionMonitor'));
+const AiExplanationPage = lazy(() => import('../pages/AiExplanation/AiExplanationPage'));
 const CategoriesPage = lazy(() => import('../pages/Categories/CategoriesPage'));
 const IntakesPage = lazy(() => import('../pages/Intakes/IntakesPage'));
 const Settings = lazy(() => import('../pages/Settings/Settings'));
@@ -42,6 +43,18 @@ export const AppRoutes = () => {
             element={
               <Suspense fallback={<LoadingFallback />}>
                 <ExtractionMonitor />
+              </Suspense>
+            }
+          />
+        </Route>
+
+        {/* AI Explanation routes */}
+        <Route path="ai-explanation">
+          <Route
+            index
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <AiExplanationPage />
               </Suspense>
             }
           />

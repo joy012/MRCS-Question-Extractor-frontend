@@ -98,8 +98,8 @@ export interface QuestionFilters {
   year?: number;
   intake?: string;
   status?: QuestionStatus;
+  explanation?: 'all' | 'with_explanation' | 'without_explanation';
   search?: string;
-  minConfidence?: number;
 }
 
 export interface QuestionSearchParams extends QuestionFilters {
@@ -107,7 +107,6 @@ export interface QuestionSearchParams extends QuestionFilters {
   limit?: number;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
-  minConfidence?: number;
 }
 
 export type QuestionsResponse = PaginatedResponse<Question>;

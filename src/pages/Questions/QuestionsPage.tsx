@@ -13,8 +13,7 @@ import { Card, CardContent } from '../../components/ui/card';
 import {
   useDeleteQuestionMutation,
   useGetQuestionCategoriesQuery,
-  useGetQuestionsQuery,
-  useUpdateQuestionStatusMutation
+  useGetQuestionsQuery
 } from '../../services/queries/useQuestions';
 import { QuestionStatus, type Question } from '../../types';
 import { CustomPagination } from './components/CustomPagination';
@@ -25,8 +24,8 @@ import { useQuestionsFilters } from './hooks/useQuestionsFilters';
 const QuestionsPage = () => {
   // Custom hooks
   const { filterState, handlers } = useQuestionsFilters();
-  const { searchTerm, statusFilter, categoryFilter, intakeFilter, yearFilter, confidenceFilter, sortBy, sortOrder, currentPage, itemsPerPage } = filterState;
-  const { handleSearch, handleStatusFilter, handleCategoryFilter, handleIntakeFilter, handleYearFilter, handleConfidenceFilter, handleSort, handleSortOrder, handlePageChange, handleResetFilters } = handlers;
+  const { searchTerm, statusFilter, categoryFilter, intakeFilter, yearFilter, confidenceFilter, explanationFilter, sortBy, sortOrder, currentPage, itemsPerPage } = filterState;
+  const { handleSearch, handleStatusFilter, handleCategoryFilter, handleIntakeFilter, handleYearFilter, handleExplanationFilter, handleSort, handleSortOrder, handlePageChange, handleResetFilters } = handlers;
 
   // API hooks
   const questionsQuery = useGetQuestionsQuery({
@@ -37,15 +36,13 @@ const QuestionsPage = () => {
     categories: categoryFilter !== 'all' ? [categoryFilter] : undefined,
     intake: intakeFilter !== 'all' ? intakeFilter : undefined,
     year: yearFilter !== 'all' ? parseInt(yearFilter) : undefined,
-    minConfidence: confidenceFilter !== 'all' ? parseFloat(confidenceFilter) : undefined,
+    explanation: explanationFilter !== 'all' ? (explanationFilter as 'with_explanation' | 'without_explanation') : undefined,
     sortBy,
     sortOrder
   });
 
   const { data: categories } = useGetQuestionCategoriesQuery();
   const deleteMutation = useDeleteQuestionMutation();
-  const approveMutation = useUpdateQuestionStatusMutation();
-  const rejectMutation = useUpdateQuestionStatusMutation();
 
   // Handlers
   const handleEdit = useCallback((question: Question) => {
@@ -56,14 +53,6 @@ const QuestionsPage = () => {
   const handleDelete = useCallback((questionId: string) => {
     deleteMutation.mutate(questionId);
   }, [deleteMutation]);
-
-  const handleApprove = useCallback((questionId: string) => {
-    approveMutation.mutate({ id: questionId, status: QuestionStatus.APPROVED });
-  }, [approveMutation]);
-
-  const handleReject = useCallback((questionId: string) => {
-    rejectMutation.mutate({ id: questionId, status: QuestionStatus.REJECTED });
-  }, [rejectMutation]);
 
   const handleExport = useCallback(() => {
     // TODO: Implement export functionality
@@ -77,9 +66,7 @@ const QuestionsPage = () => {
 
   const actions = {
     onEdit: handleEdit,
-    onDelete: handleDelete,
-    onApprove: handleApprove,
-    onReject: handleReject
+    onDelete: handleDelete
   };
 
   // Count active filters
@@ -89,7 +76,8 @@ const QuestionsPage = () => {
     categoryFilter !== 'all',
     intakeFilter !== 'all',
     yearFilter !== 'all',
-    confidenceFilter !== 'all'
+    confidenceFilter !== 'all',
+    explanationFilter !== 'all'
   ].filter(Boolean).length;
 
   return (
@@ -179,8 +167,8 @@ const QuestionsPage = () => {
             onIntakeFilterChange={handleIntakeFilter}
             yearFilter={yearFilter}
             onYearFilterChange={handleYearFilter}
-            confidenceFilter={confidenceFilter}
-            onConfidenceFilterChange={handleConfidenceFilter}
+            explanationFilter={explanationFilter}
+            onExplanationFilterChange={handleExplanationFilter}
             sortBy={sortBy}
             onSortChange={handleSort}
             sortOrder={sortOrder}

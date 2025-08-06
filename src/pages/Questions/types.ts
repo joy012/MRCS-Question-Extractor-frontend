@@ -14,8 +14,6 @@ export interface QuestionCardProps {
   question: Question;
   onEdit: (question: Question) => void;
   onDelete: (questionId: string) => void;
-  onApprove: (questionId: string) => void;
-  onReject: (questionId: string) => void;
   serialNumber: number;
 }
 
@@ -31,8 +29,8 @@ export interface QuestionsFiltersProps {
   onIntakeFilterChange: (value: string) => void;
   yearFilter: string;
   onYearFilterChange: (value: string) => void;
-  confidenceFilter: string;
-  onConfidenceFilterChange: (value: string) => void;
+  explanationFilter: string;
+  onExplanationFilterChange: (value: string) => void;
   sortBy: string;
   onSortChange: (value: string) => void;
   sortOrder: 'asc' | 'desc';
@@ -54,8 +52,6 @@ export interface QuestionsStatsTypes {
 export interface QuestionActions {
   onEdit: (question: Question) => void;
   onDelete: (questionId: string) => void;
-  onApprove: (questionId: string) => void;
-  onReject: (questionId: string) => void;
 }
 
 // Filter state
@@ -66,6 +62,7 @@ export interface FilterState {
   intakeFilter: string;
   yearFilter: string;
   confidenceFilter: string;
+  explanationFilter: string;
   sortBy: string;
   sortOrder: 'asc' | 'desc';
   currentPage: number;
