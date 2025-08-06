@@ -46,8 +46,8 @@ const StatCardSkeleton = () => (
 const AiExplanationPage = () => {
   // API hooks
   const { data: status } = useGetAiExplanationStatusQuery();
-  const { data: statistics, isLoading: statisticsLoading } = useGetAiExplanationStatisticsQuery();
-  const { data: logs } = useGetAiExplanationLogsQuery();
+  const { data: statistics, isLoading: statisticsLoading } = useGetAiExplanationStatisticsQuery(status?.status === 'processing');
+  const { data: logs } = useGetAiExplanationLogsQuery(status?.status === 'processing');
 
   // Mutations
   const startMutation = useStartAiExplanationMutation();

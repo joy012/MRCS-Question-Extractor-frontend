@@ -29,33 +29,28 @@ export const useGetAiExplanationStatusQuery = () => {
   return useQuery({
     queryKey: aiExplanationKeys.status(),
     queryFn: AiExplanationService.getStatus,
-    staleTime: 5000, // 5 seconds
     refetchInterval: (query) => {
       // Refetch more frequently if processing
-      return query.state.data?.status === 'processing' ? 2000 : 10000;
+      return query.state.data?.status === 'processing' ? 30000 : false;
     },
   });
 };
 
-export const useGetAiExplanationStatisticsQuery = () => {
+export const useGetAiExplanationStatisticsQuery = (
+  refetchPeriodically?: boolean
+) => {
   return useQuery({
     queryKey: aiExplanationKeys.statistics(),
     queryFn: AiExplanationService.getStatistics,
-    staleTime: 60000, // 1 minute
+    refetchInterval: refetchPeriodically ? 30000 : false,
   });
 };
 
-export const useGetAiExplanationLogsQuery = () => {
+export const useGetAiExplanationLogsQuery = (refetchPeriodically?: boolean) => {
   return useQuery({
     queryKey: aiExplanationKeys.logs(),
     queryFn: AiExplanationService.getLogs,
-    staleTime: 10000, // 10 seconds
-    refetchInterval: (query) => {
-      // Refetch more frequently if processing
-      return query.state.data?.logs && query.state.data.logs.length > 0
-        ? 5000
-        : 10000;
-    },
+    refetchInterval: refetchPeriodically ? 30000 : false,
   });
 };
 
