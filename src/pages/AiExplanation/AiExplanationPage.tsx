@@ -47,7 +47,7 @@ const AiExplanationPage = () => {
   // API hooks
   const { data: status } = useGetAiExplanationStatusQuery();
   const { data: statistics, isLoading: statisticsLoading } = useGetAiExplanationStatisticsQuery(status?.status === 'processing');
-  const { data: logs } = useGetAiExplanationLogsQuery(status?.status === 'processing');
+  const { data: logs, isFetching: logsFetching } = useGetAiExplanationLogsQuery(status?.status === 'processing');
 
   // Mutations
   const startMutation = useStartAiExplanationMutation();
@@ -394,15 +394,7 @@ const AiExplanationPage = () => {
             </Card>
 
             {/* Live Logs */}
-            <Card className="border-0 shadow-sm">
-              <CardHeader>
-                <CardTitle className="text-base">Live Logs</CardTitle>
-                <CardDescription>Recent AI explanation processing logs</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <AiExplanationLogs logs={logs?.logs || []} />
-              </CardContent>
-            </Card>
+            <AiExplanationLogs logs={logs?.logs || []} status={status?.status} isRefetching={logsFetching} />
           </div>
         </CardContent>
       </Card>

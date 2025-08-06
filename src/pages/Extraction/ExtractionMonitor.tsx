@@ -44,11 +44,11 @@ const ExtractionMonitor: React.FC = () => {
         extractionState={extractionState}
       />
 
-
       {/* Logs */}
       <ExtractionLogs
         logs={logs.logs}
         isProcessing={isProcessing}
+        status={extractionState.status}
       />
     </div>
   );
