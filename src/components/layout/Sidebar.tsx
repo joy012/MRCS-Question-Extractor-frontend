@@ -2,6 +2,7 @@ import {
   Activity,
   BarChart3,
   BookOpen,
+  Brain,
   Calendar,
   CheckCircle,
   Clock,
@@ -10,8 +11,7 @@ import {
   Shield,
   Tag,
   XCircle,
-  Zap,
-  Brain
+  Zap
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '../../lib/utils';
@@ -46,6 +46,12 @@ const navItems: NavItem[] = [
     icon: Brain,
     label: 'AI Explanations',
     description: 'Generate question explanations'
+  },
+  {
+    to: '/ai-rephrasing',
+    icon: Brain,
+    label: 'AI Rephrasing',
+    description: 'Rephrase question titles'
   },
   {
     to: '/questions',

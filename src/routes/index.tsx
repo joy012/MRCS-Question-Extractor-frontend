@@ -9,6 +9,7 @@ const QuestionsList = lazy(() => import('../pages/Questions/QuestionsPage'));
 const QuestionDetail = lazy(() => import('../pages/Questions/QuestionDetail'));
 const ExtractionMonitor = lazy(() => import('../pages/Extraction/ExtractionMonitor'));
 const AiExplanationPage = lazy(() => import('../pages/AiExplanation/AiExplanationPage'));
+const AiRephrasingPage = lazy(() => import('../pages/AiRephrasing/AiRephrasingPage'));
 const CategoriesPage = lazy(() => import('../pages/Categories/CategoriesPage'));
 const IntakesPage = lazy(() => import('../pages/Intakes/IntakesPage'));
 const Settings = lazy(() => import('../pages/Settings/Settings'));
@@ -55,6 +56,18 @@ export const AppRoutes = () => {
             element={
               <Suspense fallback={<LoadingFallback />}>
                 <AiExplanationPage />
+              </Suspense>
+            }
+          />
+        </Route>
+
+        {/* AI Rephrasing routes */}
+        <Route path="ai-rephrasing">
+          <Route
+            index
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <AiRephrasingPage />
               </Suspense>
             }
           />
@@ -115,10 +128,10 @@ export const AppRoutes = () => {
             }
           />
         </Route>
-
-        {/* Catch all - redirect to dashboard */}
-        <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
+
+      {/* Catch all route */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };

@@ -4,6 +4,7 @@ import {
   ArrowLeft,
   BarChart3,
   BookOpen,
+  Brain,
   Calendar,
   CheckCircle,
   Clock,
@@ -346,16 +347,52 @@ const QuestionDetail = () => {
               <div className="space-y-3">
                 <Label htmlFor="question-text" className="text-sm font-medium">Question</Label>
                 {isEditing ? (
-                  <Textarea
-                    id="question-text"
-                    value={editForm.question || ''}
-                    onChange={(e) => updateEditForm('question', e.target.value)}
-                    className="min-h-[120px] resize-none"
-                    placeholder="Enter the question text..."
-                  />
+                  <div className="space-y-3">
+                    {question.aiRephrasedTitle && (
+                      <div className="space-y-2">
+                        <Label htmlFor="ai-rephrased-title" className="text-sm font-medium text-purple-600 flex items-center gap-2">
+                          <Brain className="h-4 w-4" />
+                          AI Rephrased Title
+                        </Label>
+                        <Textarea
+                          id="ai-rephrased-title"
+                          value={editForm.aiRephrasedTitle || ''}
+                          onChange={(e) => updateEditForm('aiRephrasedTitle', e.target.value)}
+                          className="min-h-[80px] resize-none bg-purple-50 border-purple-200"
+                          placeholder="AI rephrased question title..."
+                        />
+                      </div>
+                    )}
+                    <div className="space-y-2">
+                      <Label htmlFor="question-text" className="text-sm font-medium text-gray-600">Original Question</Label>
+                      <Textarea
+                        id="question-text"
+                        value={editForm.question || ''}
+                        onChange={(e) => updateEditForm('question', e.target.value)}
+                        className="min-h-[120px] resize-none"
+                        placeholder="Enter the question text..."
+                      />
+                    </div>
+                  </div>
                 ) : (
-                  <div className="p-4 bg-muted/50 rounded-lg border">
-                    <p className="text-foreground whitespace-pre-wrap leading-relaxed">{question.question}</p>
+                  <div className="space-y-3">
+                    {question.aiRephrasedTitle && (
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <Brain className="h-4 w-4 text-purple-600" />
+                          <Label className="text-sm font-medium text-purple-600">AI Rephrased Title</Label>
+                        </div>
+                        <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
+                          <p className="text-foreground whitespace-pre-wrap leading-relaxed">{question.aiRephrasedTitle}</p>
+                        </div>
+                      </div>
+                    )}
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium text-gray-600">Original Question</Label>
+                      <div className="p-4 bg-muted/50 rounded-lg border">
+                        <p className="text-foreground whitespace-pre-wrap leading-relaxed">{question.question}</p>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>

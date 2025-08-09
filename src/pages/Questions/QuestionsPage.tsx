@@ -24,8 +24,8 @@ import { useQuestionsFilters } from './hooks/useQuestionsFilters';
 const QuestionsPage = () => {
   // Custom hooks
   const { filterState, handlers } = useQuestionsFilters();
-  const { searchTerm, statusFilter, categoryFilter, intakeFilter, yearFilter, confidenceFilter, explanationFilter, sortBy, sortOrder, currentPage, itemsPerPage } = filterState;
-  const { handleSearch, handleStatusFilter, handleCategoryFilter, handleIntakeFilter, handleYearFilter, handleExplanationFilter, handleSort, handleSortOrder, handlePageChange, handleResetFilters } = handlers;
+  const { searchTerm, statusFilter, categoryFilter, intakeFilter, yearFilter, confidenceFilter, explanationFilter, sortBy, sortOrder, currentPage, itemsPerPage, rephrasingFilter } = filterState;
+  const { handleSearch, handleStatusFilter, handleCategoryFilter, handleIntakeFilter, handleYearFilter, handleExplanationFilter, handleSort, handleSortOrder, handlePageChange, handleResetFilters, handleRphrasingFilter } = handlers;
 
   // API hooks
   const questionsQuery = useGetQuestionsQuery({
@@ -37,6 +37,7 @@ const QuestionsPage = () => {
     intake: intakeFilter !== 'all' ? intakeFilter : undefined,
     year: yearFilter !== 'all' ? parseInt(yearFilter) : undefined,
     explanation: explanationFilter !== 'all' ? (explanationFilter as 'with_explanation' | 'without_explanation') : undefined,
+    rephrasing: rephrasingFilter !== 'all' ? (rephrasingFilter as 'with_rephrasing' | 'without_rephrasing') : undefined,
     sortBy,
     sortOrder
   });
@@ -169,6 +170,8 @@ const QuestionsPage = () => {
             sortOrder={sortOrder}
             onSortOrderChange={handleSortOrder}
             categories={categories || []}
+            rephrasingFilter={rephrasingFilter}
+            onRphrasingFilterChange={handleRphrasingFilter}
           />
         </CardContent>
       </Card>

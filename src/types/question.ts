@@ -62,6 +62,7 @@ export interface Category {
 export interface Question {
   id: string;
   question: string;
+  aiRephrasedTitle?: string;
   options: QuestionOptions;
   correctAnswer: CorrectAnswer;
   description?: string;
@@ -80,6 +81,7 @@ export interface Question {
 
 export interface CreateQuestionData {
   question: string;
+  aiRephrasedTitle?: string;
   options: QuestionOptions;
   correctAnswer: CorrectAnswer;
   description?: string;
@@ -100,6 +102,7 @@ export interface QuestionFilters {
   status?: QuestionStatus;
   explanation?: 'all' | 'with_explanation' | 'without_explanation';
   search?: string;
+  rephrasing?: 'all' | 'with_rephrasing' | 'without_rephrasing';
 }
 
 export interface QuestionSearchParams extends QuestionFilters {

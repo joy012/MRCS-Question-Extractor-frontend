@@ -286,7 +286,7 @@ export const ExtractionLogs: React.FC<ExtractionLogsProps> = ({
             {/* Logs */}
             <div className="space-y-1">
               {hasLogs ? (
-                terminalLogs.slice().reverse().map((log, index) => (
+                terminalLogs.map((log, index) => (
                   <div
                     key={log.id}
                     className="flex items-start gap-2 p-1 rounded transition-all duration-200 hover:bg-gray-900/50"

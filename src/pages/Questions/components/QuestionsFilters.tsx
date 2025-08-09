@@ -65,14 +65,19 @@ const FilterWrapper = ({ children, active = false }: { children: React.ReactNode
 );
 
 // Compact status filter
-const StatusFilter = ({ statusFilter, onStatusFilterChange, explanationFilter, onExplanationFilterChange }: Pick<QuestionsFiltersProps, 'statusFilter' | 'onStatusFilterChange' | 'explanationFilter' | 'onExplanationFilterChange'>) => {
+const StatusFilter = ({ statusFilter, onStatusFilterChange, explanationFilter, onExplanationFilterChange, rephrasingFilter, onRphrasingFilterChange }: Pick<QuestionsFiltersProps, 'statusFilter' | 'onStatusFilterChange' | 'explanationFilter' | 'onExplanationFilterChange' | 'rephrasingFilter' | 'onRphrasingFilterChange'>) => {
   const isExplanationFilter = statusFilter === 'with_explanation' || statusFilter === 'without_explanation';
-  const currentValue = isExplanationFilter ? explanationFilter : statusFilter;
+  const isRphrasingFilter = statusFilter === 'with_rephrasing' || statusFilter === 'without_rephrasing';
+  const currentValue = isExplanationFilter ? explanationFilter : isRphrasingFilter ? rephrasingFilter : statusFilter;
 
   const handleValueChange = (value: string) => {
     if (value === 'with_explanation' || value === 'without_explanation') {
       onExplanationFilterChange(value);
-    } else {
+    }
+    else if (value === 'with_rephrasing' || value === 'without_rephrasing') {
+      onRphrasingFilterChange(value);
+    }
+    else {
       onStatusFilterChange(value);
     }
   };
@@ -119,6 +124,18 @@ const StatusFilter = ({ statusFilter, onStatusFilterChange, explanationFilter, o
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
               <span className="text-sm">Without AI Explanation</span>
+            </div>
+          </SelectItem>
+          <SelectItem value="with_rephrasing" className="hover:bg-blue-50 rounded-md">
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+              <span className="text-sm">With AI Rephrasing</span>
+            </div>
+          </SelectItem>
+          <SelectItem value="without_rephrasing" className="hover:bg-red-50 rounded-md">
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
+              <span className="text-sm">Without AI Rephrasing</span>
             </div>
           </SelectItem>
         </SelectContent>
@@ -233,6 +250,8 @@ export const QuestionsFilters = ({
   onYearFilterChange,
   explanationFilter,
   onExplanationFilterChange,
+  rephrasingFilter,
+  onRphrasingFilterChange,
   categories: propCategories,
   intakes: propIntakes,
   years: propYears,
@@ -258,7 +277,7 @@ export const QuestionsFilters = ({
 
           {/* Filter Controls */}
           <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
-            <StatusFilter statusFilter={statusFilter} onStatusFilterChange={onStatusFilterChange} explanationFilter={explanationFilter} onExplanationFilterChange={onExplanationFilterChange} />
+            <StatusFilter statusFilter={statusFilter} onStatusFilterChange={onStatusFilterChange} explanationFilter={explanationFilter} onExplanationFilterChange={onExplanationFilterChange} rephrasingFilter={rephrasingFilter} onRphrasingFilterChange={onRphrasingFilterChange} />
             <CategoryFilter
               categoryFilter={categoryFilter}
               onCategoryFilterChange={onCategoryFilterChange}

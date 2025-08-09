@@ -28,6 +28,9 @@ export const useQuestionsFilters = () => {
   const [explanationFilter, setExplanationFilter] = useState(
     searchParams.get('explanation') || 'all'
   );
+  const [rephrasingFilter, setRphrasingFilter] = useState(
+    searchParams.get('rephrasing') || 'all'
+  );
   const [sortBy, setSortBy] = useState(
     searchParams.get('sortBy') || 'createdAt'
   );
@@ -129,6 +132,15 @@ export const useQuestionsFilters = () => {
     [updateUrlParams]
   );
 
+  const handleRphrasingFilter = useCallback(
+    (value: string) => {
+      setRphrasingFilter(value);
+      setCurrentPage(1);
+      updateUrlParams({ rephrasing: value === 'all' ? '' : value, page: '1' });
+    },
+    [updateUrlParams]
+  );
+
   const handleSort = useCallback(
     (value: string) => {
       setSortBy(value);
@@ -177,6 +189,7 @@ export const useQuestionsFilters = () => {
     yearFilter,
     confidenceFilter,
     explanationFilter,
+    rephrasingFilter,
     sortBy,
     sortOrder,
     currentPage,
@@ -193,6 +206,7 @@ export const useQuestionsFilters = () => {
       handleYearFilter,
       handleConfidenceFilter,
       handleExplanationFilter,
+      handleRphrasingFilter,
       handleSort,
       handleSortOrder,
       handlePageChange,

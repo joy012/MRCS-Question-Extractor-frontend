@@ -38,6 +38,8 @@ export interface QuestionsFiltersProps {
   categories?: CategoryInfo[];
   intakes?: IntakeInfo[];
   years?: YearInfo[];
+  rephrasingFilter: string;
+  onRphrasingFilterChange: (value: string) => void;
 }
 
 // Statistics data
@@ -67,6 +69,7 @@ export interface FilterState {
   sortOrder: 'asc' | 'desc';
   currentPage: number;
   itemsPerPage: number;
+  rephrasingFilter: string;
 }
 
 // URL params updates

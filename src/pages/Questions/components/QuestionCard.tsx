@@ -276,6 +276,20 @@ export const QuestionCard = ({ question, onEdit, onDelete, serialNumber }: Quest
 
               {/* Question Text */}
               <div className="mb-2">
+                {question.aiRephrasedTitle && (
+                  <div className="mb-2">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Brain className="h-3 w-3 text-purple-600" />
+                      <span className="text-xs font-medium text-purple-600">AI Rephrased Title</span>
+                    </div>
+                    <p className="text-sm text-gray-800 leading-relaxed bg-purple-50 p-2.5 rounded border border-purple-100">
+                      {question.aiRephrasedTitle}
+                    </p>
+                  </div>
+                )}
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs font-medium text-gray-600">Original Question</span>
+                </div>
                 <p className="text-sm text-gray-700 leading-relaxed bg-gray-50 p-2.5 rounded border border-gray-100">
                   {question.question}
                 </p>

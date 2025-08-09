@@ -32,6 +32,7 @@ export class QuestionsService {
     if (params.sortOrder) searchParams.append('sortOrder', params.sortOrder);
     if (params.explanation)
       searchParams.append('explanation', params.explanation);
+    if (params.rephrasing) searchParams.append('rephrasing', params.rephrasing);
 
     const queryString = searchParams.toString();
     const url = queryString ? `/questions?${queryString}` : '/questions';

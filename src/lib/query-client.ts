@@ -41,6 +41,7 @@ export const queryKeys = {
         params.sortOrder,
         params.status,
         params.year,
+        params.rephrasing,
       ] as const,
   },
 
@@ -71,6 +72,27 @@ export const queryKeys = {
     validation: () => [...queryKeys.extraction.all, 'validation'] as const,
     pdfInfo: () => [...queryKeys.extraction.all, 'pdf-info'] as const,
     ollamaHealth: () => [...queryKeys.extraction.all, 'ollama-health'] as const,
+  },
+
+  // AI Explanation
+  aiExplanation: {
+    all: ['ai-explanation'] as const,
+    settings: () => [...queryKeys.aiExplanation.all, 'settings'] as const,
+    status: () => [...queryKeys.aiExplanation.all, 'status'] as const,
+    statistics: () => [...queryKeys.aiExplanation.all, 'statistics'] as const,
+    logs: () => [...queryKeys.aiExplanation.all, 'logs'] as const,
+    summary: () => [...queryKeys.aiExplanation.all, 'summary'] as const,
+  },
+
+  // AI Rephrasing
+  aiRephrasing: {
+    all: ['ai-rephrasing'] as const,
+    settings: () => [...queryKeys.aiRephrasing.all, 'settings'] as const,
+    status: () => [...queryKeys.aiRephrasing.all, 'status'] as const,
+    statistics: () => [...queryKeys.aiRephrasing.all, 'statistics'] as const,
+    logs: () => [...queryKeys.aiRephrasing.all, 'logs'] as const,
+    questions: (params?: { page?: number; limit?: number; status?: string }) =>
+      [...queryKeys.aiRephrasing.all, 'questions', params] as const,
   },
 } as const;
 
